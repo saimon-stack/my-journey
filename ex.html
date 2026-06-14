@@ -1,91 +1,164 @@
 <style>
-.REQUEST{
-background-color:rgb(0, 0, 0);
-color:white;
-height:40px;
-width:125;
-cursor:pointer;
-margin:8px;
-}
-.addtocart
-{
-    background-color:rgb(255, 216, 20);
-    color:black;
-    border-radius:20px;
-    height:35px;
-    width:160px;
-    border:none;
-    cursor:pointer;
-    font-size:15px;
-}
-.Signup{
-    background-color: rgb(46, 164, 79);
-    color:white;
-    border-radius:6px;
-    width:100px;
-    height:40px;
-    border:none;
-    font-weight:bold;
-    font: size 13px;
-    margin-left:8px;
-    cursor:pointer;
-}
-.start{
-    background-color:rgb(121, 82, 179);
-    color:white;
-    width:120px;
-    height:40px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-    font: size 13px;
-    border:none;
-    margin-left:8px;
-}
-.download
-{   background-color:white;
-    color:rgb(108, 117, 125);
-    width:115px;
-    height:40px;
-    border-radius:8px;
-    border-color:rgb(108, 117, 125);
-    border-style:solid;
-    border-width:1px;
-    margin-left:4px;
-    font-weight:bold;
-    font-size:13px;
-    cursor:pointer;
-}
-    .apply{
-        background-color:rgb(10, 102, 194);
-        color:white;
-        font-weight:bold;
-        border-radius:20px;
-        height:42px;
-        width:210px;
-        border:none;
-        margin-left:8px;
-        font-size:13px;
-    }
-    .save
+.REQUEST-now-button
     {
-        background-color:white;
-        color:rgb(10, 102, 194);
-        border-width:1px;
-        font-weight:bold;
-        border-color:rgb(10, 102, 194);
-        border-radius:20px;
-        height:40px;
-        width:90px;
-        font-size:15px;
-        border-style:solid;
-        margin-left:4px;
+            background-color:rgb(0, 0, 0);
+            color:white;
+            height:40px;
+            width:125px;
+            cursor:pointer;
+            margin:8px;
+            transition: opacity 0.15s;
+    }
+.REQUEST-now-button:hover
+    {
+            opacity:0.7;
+    }
+.REQUEST-now-button:active
+    {
+            opacity:0.5;
+    }
+.addtocart-button
+    {
+            background-color:rgb(255, 216, 20);
+            color:black;
+            border-radius:20px;
+            height:35px;
+            width:160px;
+            border:none;
+            cursor:pointer;
+            font-size:15px;
+            transition: opacity 0.15s;
+    }
+.addtocart-button:hover
+    {
+            opacity:0.7;
+    }
+.addtocart-button:active
+    {
+            opacity:0.5;
+    }
+.Sign-up-button
+    {
+            background-color: rgb(46, 164, 79);
+            color:white;
+            border-radius:6px;
+            width:100px;
+            height:40px;
+            border:none;
+            font-weight:bold;
+            font-size:13px;
+            margin-left:8px;
+            cursor:pointer;
+            transition: opacity 0.15s;
+    }
+.Sign-up-button:hover
+    {
+            opacity:0.7;
+    }
+.Sign-up-button:active
+    {
+            opacity:0.5;
+    }
+.start-button
+    {
+            background-color:rgb(121, 82, 179);
+            color:white;
+            width:120px;
+            height:40px;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+            font-size:13px;
+            border:none;
+            margin-left:8px;
+            transition: opacity 0.15s;
+    }
+.start-button:hover
+    {
+            opacity:0.7;
+    }
+.start-button:active
+    {
+            opacity:0.5;
+    }
+.download-button
+    {  
+            background-color:white;
+            color:rgb(108, 117, 125);
+            width:115px;
+            height:40px;
+            border-radius:8px;
+            border-color:rgb(108, 117, 125);
+            border-style:solid;
+            border-width:1px;
+            margin-left:4px;
+            font-weight:bold;
+            font-size:13px;
+            cursor:pointer;
+            transition: background-color 0.15s;
+    }
+.download-button:hover
+    {
+            background-color:rgb(108, 117, 125);
+            color:white;
+    }
+.download-button:active
+    {
+            opacity:0.5;
+    }
+.apply-button
+    {
+            background-color:rgb(10, 102, 194);
+            color:white;
+            font-weight:bold;
+            border-radius:20px;
+            height:42px;
+            width:210px;
+            border:none;
+            margin-left:8px;
+            font-size:13px;
+            cursor:pointer;
+            transition: opacity 0.15s;
+    }
+.apply-button:hover
+    {
+            opacity:0.7;
+    }
+.apply-button:active
+    {
+            opacity:0.5;
+    }
+.save-button
+    {
+            background-color:white;
+            color:rgb(10, 102, 194);
+            border-width:1px;
+            font-weight:bold;
+            border-color:rgb(10, 102, 194);
+            border-radius:20px;
+            height:40px;
+            width:90px;
+            font-size:15px;
+            border-style:solid;
+            margin-left:4px;
+            cursor:pointer;
+            transition: background-color 0.15s;
+    }
+.save-button:hover
+    {
+            background-color:rgb(10, 102, 194);
+            color:white;
+    }
+.save-button:active    
+    {
+            opacity:0.5;
+
     }
 </style>
-<button class="REQUEST">Request now</button>
-<button class="addtocart">Add to Cart</button>
-<button class="Signup">Sign up</button>
-<button class="start">Get started</button>
-<button class="download">Download</button>
-<button class="apply">Apply on company website</button>
-<button class="save">Save</button>
+<button class="REQUEST-now-button">Request now</button>
+<button class="addtocart-button">Add to Cart</button>
+<button class="Sign-up-button">Sign up</button>
+<button class="start-button">Get started</button>
+<button class="download-button">Download</button>
+<button class="apply-button">Apply on company website</button>
+<button class="save-button">Save</button>
