@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My first exercise</title>
+    <style>
+            #status-message
+            {
+                color:#2ffd5f;
+                font-size: 13px;
+                font-weight: bold;
+                margin-bottom: 0px;
+                margin-left:21px;
+                height: 20px;
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+            #status-message.show
+            {
+                opacity: 1;
+            }
+            #cart
+            {
+                height:30px;
+                width:100px;
+                border-radius:18px;
+                border:none;
+                background-color:rgb(255, 237, 35);
+                cursor:pointer;
+                margin-top:0px;
+            }
+    </style>
+</head>
+<body>
+    <h2>My first exercise java script</h2>
+      <p id="status-message">&#10004 Added</p>
+    <button type="button" id="cart" onclick="added()">
+            Add to cart
+    </button>
+    <script>
+        function added()
+        {
+            document.getElementById("status-message").classList.add("show");
+        }
+    </script>
+</body>
+</html>
