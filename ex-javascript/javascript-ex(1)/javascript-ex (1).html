@@ -29,6 +29,14 @@
                 cursor:pointer;
                 margin-top:0px;
             }
+            #cart:hover
+            {
+                opacity: 0.8;
+            }
+            #cart:active
+            {
+                opacity: 0.6;
+            }
     </style>
 </head>
 <body>
@@ -37,11 +45,6 @@
     <button type="button" id="cart" onclick="added()">
             Add to cart
     </button>
-    <script>
-        function added()
-        {
-            document.getElementById("status-message").classList.add("show");
-        }
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
