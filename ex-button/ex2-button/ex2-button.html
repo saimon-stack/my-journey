@@ -1,3 +1,6 @@
+<head>
+    <title>My Button Page 2</title>
+    <meta charset="UTF-8">
 <style>
 .nike
   {
@@ -17,7 +20,7 @@
 {
       font-size:15px;
 }
-.cart
+#cart
 {
       border-radius:20px;
       border:none;
@@ -29,11 +32,11 @@
       cursor:pointer;
       transition: opacity 0.15s;
 }
-.cart:hover
+#cart:hover
 {
       opacity:0.7;
 }
-.cart:active
+#cart:active
 {
       opacity:0.5;
 }
@@ -58,9 +61,14 @@
       opacity:0.5;
 }
 </style>
+</head>
+<body>
 <a href="https://www.amazon.com/" class="a">Back to amazon</a>
 <p class="nike">Nike Black Running Shoes</p>
 <p class="stock">$39 - in stock.</p>
 <p class="free">Free delivery tomorow.</p>
-<button class="cart">Add to cart</button>
+<button id="cart" type="button">Add to cart</button>
 <button class="buy">Buy now</button>
+<script src="script-button(2).js"></script>
+</body>
+</html>
