@@ -40,6 +40,47 @@
 {
       opacity:0.5;
 }
+
+#added{
+
+      font-size:10px;
+      color:rgb(0, 118, 0);
+      font-weight: bold;
+      opacity:0;
+      transition: opacity 0.3s ease;
+      margin-left:25px;
+      margin-bottom:0px;
+}
+#added.show
+{
+       font-size:10px;
+      color:rgb(0, 118, 0);
+      font-weight: bold;
+      opacity:1;
+      transition: opacity 0.3s ease;
+      margin-left:25px;
+      margin-bottom:0px;
+}
+#bought
+{
+      font-size:10px;
+      color:rgb(0, 118, 0);
+      font-weight: bold;
+      opacity:0;
+      transition: opacity 0.3s ease;
+      margin-left:131px;
+      margin-bottom:0px;
+}
+#bought.show
+{
+      font-size:10px;
+      color:rgb(0, 118, 0);
+      font-weight: bold;
+      opacity:1;
+      transition: opacity 0.3s ease;
+      margin-left:131px;
+      margin-bottom:0px;
+}
 .buy
 {
       border-radius:20px;
@@ -67,8 +108,10 @@
 <p class="nike">Nike Black Running Shoes</p>
 <p class="stock">$39 - in stock.</p>
 <p class="free">Free delivery tomorow.</p>
-<button id="cart" type="button">Add to cart</button>
-<button class="buy">Buy now</button>
+<p id="added" class="added">✓added</p>
+<p id="bought" class="bought">✓bought</p>
+<button id="cart" type="button" onclick="addtoCart()">Add to cart</button>
+<button class="buy" onclick="buyNow()">Buy now</button>
 <script src="script-button(2).js"></script>
 </body>
 </html>
