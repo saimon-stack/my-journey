@@ -1,0 +1,78 @@
+ body {
+     transition: background-color 0.25s ease;
+ }
+h2 {
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 20px;
+    display: block;
+ }
+  /* blue button styles */
+ #change-blue {
+     height: 40px;
+     width: 100px;
+     border: none;
+     background-color: rgb(0, 119, 255);
+     color: white;
+     cursor: pointer;
+     font-weight: bold;
+     font-size: 15px;
+     transition: opacity 0.5s ease, background-color 0.25s ease;
+     border-radius: 5px;
+ }
+
+ #change-blue:hover {
+     opacity: 0.8;
+     background-color: rgb(0, 90, 190);
+ }
+
+ #change-blue:active {
+     opacity: 0.6;
+ }
+/* red button styles */
+ #change-red {
+     height: 40px;
+     width: 100px;
+     border: none;
+     background-color: rgb(255, 0, 0);
+     color: white;
+     cursor: pointer;
+     font-weight: bold;
+     font-size: 15px;
+     transition: opacity 0.5s ease, background-color 0.25s ease;
+     border-radius: 5px;
+ }
+
+ #change-red:hover {
+     opacity: 0.8;
+     background-color: rgb(190, 0, 0);
+ }
+
+ #change-red:active {
+     opacity: 0.6;
+ }
+/* green button styles */
+ #change-green {
+     height: 40px;
+     width: 100px;
+     border: none;
+     background-color: rgb(23, 187, 23);
+     color: white;
+     cursor: pointer;
+     font-weight: bold;
+     font-size: 15px;
+     transition: opacity 0.5s ease, background-color 0.25s ease;
+     border-radius: 5px;
+ }
+/* default button styles */
+ #change-default {
+     height: 40px;
+     width: 100px;
+     border: none;
+     background-color: rgb(128, 128, 128);
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+        transition: opacity 0.5s ease, background-color 0.25s ease;
+        border-radius: 5px;
+    }
