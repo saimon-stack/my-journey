@@ -1,0 +1,26 @@
+
+        #print {
+            height: 30px;
+            width: 100px;
+            border: 1px solid rgb(7, 6, 2);
+            background-color: rgb(254, 255, 255);
+            cursor: pointer;
+            margin-top: 0px;
+            border-color: rgb(0, 119, 255);
+            font-weight: bold;
+            font-size: 15px;
+            color: rgb(0, 119, 255);
+            transition: opacity 0.5s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            Border-radius: 5px;
+        }
+
+        #print:hover {
+            opacity: 0.8;
+            border-color: white;
+            color: white;
+            background-color: rgb(0, 119, 255);
+        }
+
+        #print:active {
+            opacity: 0.6;
+        }
