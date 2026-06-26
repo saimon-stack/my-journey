@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>booleans ex2</title>
+    </head>
+    <body>
+        <script>
+            let name = prompt("Enter your name");
+            const hour = new Date().getHours();
+            let greeting;
+            if (hour < 12) {
+                greeting = `Good morning, ${name}!`;
+            } else if (hour < 18) {
+                greeting = `Good afternoon, ${name}!`;
+            } else {
+                greeting = `Good evening, ${name}!`;
+            }
+            alert(greeting);
+        </script>
+    </body>
+</html>
