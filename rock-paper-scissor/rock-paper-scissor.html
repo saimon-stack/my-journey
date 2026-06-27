@@ -1,78 +1,19 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Rock Paper Scissor</title>
+    <title>Rock Paper Scissors</title>
 </head>
 <body>
-    <h2>Rock Paper Scissor</h2>
-     
-     <!-- rock button -->
-     <button onclick="
-        randomNumber = Math.random(); 
-    if (randomNumber >= 0 && randomNumber < 1/3) {
-         computerMove='rock';
-    } else if (randomNumber >= 1/3 && randomNumber < 2/3) {
-         computerMove='paper';
-    } else {
-         computerMove='scissor';
-    }
-        if (computerMove === 'scissor') {
-            result = ' Computer chose scissor. You win!.';
-        } else if (computerMove === 'paper') {
-            result = ' Computer chose paper. You lose!.';
-        } else {
-            result = ' Computer chose rock. It\'s a tie!';
-        }
-        alert('You picked rock. ' + result);
-    ">rock</button>
-    
-    <!-- paper button -->
-    <button onclick="
-        randomNumber = Math.random();
-    if (randomNumber >= 0 && randomNumber < 1/3) {
-        computerMove='paper';
-    } else if (randomNumber >= 1/3 && randomNumber < 2/3) {
-         computerMove='rock';
-    } else {
-         computerMove='scissor';
-    }
-        if (computerMove === 'scissor') {
-            result = ' Computer chose scissor. You lose!.';
-        } else if (computerMove === 'rock') {
-            result = ' Computer chose rock. You win!.';
-        } else {
-            result = ' Computer chose paper. It\'s a tie!';
-        }
-        alert('You picked paper. ' + result);
-    ">paper</button>
-    
-    <!-- scissor button -->
-    <button onclick="
-            randomNumber = Math.random();
-    if (randomNumber >= 0 && randomNumber < 1/3) {
-         computerMove='scissor';
-    } else if (randomNumber >= 1/3 && randomNumber < 2/3) {
-         computerMove='paper';
-    } else {
-         computerMove='rock';
-    }
-        if (computerMove === 'rock') {
-            result = ' Computer chose rock. You lose!.';
-        } else if (computerMove === 'paper') {
-            result = ' Computer chose paper. You win!.';
-        } else {
-            result = ' Computer chose scissor. It\'s a tie!';
-        }
-        alert('You picked scissor. ' + result);
-    ">scissor</button>
+    <h2>Rock Paper Scissors</h2>
 
+    <button onclick="play('rock')">Rock</button>
+    <button onclick="play('paper')">Paper</button>
+    <button onclick="play('scissor')">Scissor</button>
 
-    <script>
-            let randomNumber = Math.random();
-            let computerMove = '';
-            let result = '';
-   </script>
+    <script src="rock-paper-scissor.js"></script>
+        
+    </script>
 </body>
 </html>
