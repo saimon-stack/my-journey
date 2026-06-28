@@ -5,7 +5,7 @@ function getComputerMove() {
             else                         return 'scissor';
         }
 
-        function getResult(playerMove,computerMove) {
+        function getResult(playerMove, computerMove) {
             if (playerMove === computerMove) return 'Tie!';
 
             if (playerMove === 'rock'    && computerMove === 'scissor') return 'You win!';
