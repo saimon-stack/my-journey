@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>calculate Movement Speed</title>
+    </head>
+    <body>
+        <script>
+        /**
+            * Calculates the character's movement speed based on weight penalties.
+            * Standardized for game development production environment.
+            *
+            * @param {number} baseSpeed - The character's base movement speed.
+            * @param {number} weight - The character's current weight.
+            * @param {number} maxWeight - the maximum weight the character can carry
+            * @return {number} the final calculated movement speed after applying weight penalties.
+            */
+
+            function calculateMovementSpeed(baseSpeed, weight, maxWeight) {
+                // 1. Guard Clauses
+                if (baseSpeed <=0 || weight <=0 || maxWeight <=0) {
+                    return 0;
+                }
+                // 2.logic processing
+                //a,overWeight.      
+                    if (weight >= maxWeight) {
+                            return 0;
+                    }
+                //b,exceeding 80% of capacity ==> Speed ​​reduced by 50%
+                     else if (weight >= 0.8 * maxWeight) {
+                            return baseSpeed *= 0.5 ;
+                    }
+                //c,Loaded to between over 50% and 80% of capacity ==> speed reduced by 20%
+                    else if ( weight >= 0.5 * maxWeight) {
+                            return baseSpeed *= 0.8 ;
+                    }
+                //d,50% capacity or less ==> Speed ​​remains unchanged.
+                    else{
+                            return baseSpeed;
+                    }
+
+            }
+
+            //=====================================
+            // TEST CASE
+            //=====================================
+
+            // Case 1: Overweight. Carrying 120kg while max is 100kg . can't move
+            // Expected: 0
+            let speed1 = calculateMovementSpeed(100, 120, 100);
+            console.log("Test Case 1 - Overweight:", speed1 === 0 ? "PASSED" : "FAILED (Expected 0, got " + speed1 + ")");
+            // Case 2: Heavy load (85kg out of 100kg = 85% > 80%). Speed cut by half.
+            // Expected: 100 * 0.5 = 50
+            let speed2 = calculateMovementSpeed(100, 85, 100);
+            console.log("Test Case 2 - Heavy Load:", speed2 === 50 ? "PASSED" : "FAILED (Expected 50, got " + speed2 + ")");
+
+            // Case 3: Medium load (60kg out of 100kg = 60% > 50%). Speed cut by 20%.
+            // Expected: 100 * 0.8 = 80
+            let speed3 = calculateMovementSpeed(100, 60, 100);
+            console.log("Test Case 3 - Medium Load:", speed3 === 80 ? "PASSED" : "FAILED (Expected 80, got " + speed3 + ")");
+
+            // Case 4: Light load (30kg out of 100kg = 30% <= 50%). Full speed.
+            // Expected: 100
+            let speed4 = calculateMovementSpeed(100, 30, 100);
+            console.log("Test Case 4 - Light Load:", speed4 === 100 ? "PASSED" : "FAILED (Expected 100, got " + speed4 + ")");
+
+
+        </script>
+    </body>
+</html>
