@@ -1,0 +1,74 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <title>My Taxi Fare Calculator</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Calculates the final taxi fare based on distance, traffic conditions, and time of day.
+       * Standardized for ride-hailing production environment.
+       *
+       * @param {number} distance - The total travel distance in kilometers.
+       * @param {boolean} hasTrafficJam - True if there is heavy traffic.
+       * @param {boolean} isNightTime - True if the ride occurs during night hours.
+       * @returns {number} The final calculated fare in dollars.
+       */
+      function calculateTaxiFare(distance, hasTrafficJam, isNightTime) {
+        // 1. Guard Clause
+        if (distance <= 0) {
+          return 0;
+        }
+
+        // 2. Logic Processing
+        let baseFare = 2.0; // Base opening fare
+        let distanceFare = (distance - 0.5) * 1.5; // Fare for distance beyond the initial km
+        let totalFare = baseFare + distanceFare;
+
+        // TODO: Step 2 - Add traffic jam surcharge
+        if (hasTrafficJam) {
+          totalFare += 3.0;
+        }
+
+        // TODO: Step 3 - Apply night time multiplier (if applicable)
+        if (isNightTime) {
+          totalFare *= 1.2;
+        }
+
+        // 3. Return the final result
+        return totalFare;
+      }
+
+      // ==========================================
+      // TEST CASES
+      // ==========================================
+
+      // Case 1: Short trip (0.5 km) on a clear day. Should just be the base opening fare.
+      // Expected: 2.0
+      let fare1 = calculateTaxiFare(0.5, false, false);
+      console.log(
+        "Test Case 1 - Short Clear Trip:",
+        fare1 === 2.0 ? "PASSED" : "FAILED (Expected 2.0, got " + fare1 + ")",
+      );
+
+      // Case 2: 5 km trip, daytime, but has a traffic jam.
+      // Base: 2.0 + (4 * 1.5) = 8.0. Traffic jam: + 3.0 = 11.0
+      // Expected: 11.0
+      let fare2 = calculateTaxiFare(5, true, false);
+      console.log(
+        "Test Case 2 - Traffic Jam Day:",
+        fare2 === 11.0 ? "PASSED" : "FAILED (Expected 11.0, got " + fare2 + ")",
+      );
+
+      // Case 3: 5 km trip, night time, with a traffic jam.
+      // Total from Case 2 is 11.0. Night surcharge: 11.0 * 1.2 = 13.2
+      // Expected: 13.2
+      let fare3 = calculateTaxiFare(5, true, true);
+      console.log(
+        "Test Case 3 - Traffic Jam Night:",
+        fare3 === 13.2 ? "PASSED" : "FAILED (Expected 13.2, got " + fare3 + ")",
+      );
+    </script>
+  </body>
+</html>

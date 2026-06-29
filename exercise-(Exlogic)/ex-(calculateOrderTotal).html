@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>calculate-Order-Total</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Calculates the final total price for an order, including discounts and shipping fees.
+       * Standardized for e-commerce production environment.
+       *
+       * @param {number} price - The unit price of the itemn (must be greater than 0).
+       * @param {number} quantity - The quantity ordered (must be greater than 0).
+       * @param {number} discountPercentage - Discount percent to apply (0 to 100).
+       * @param {boolean} isPremiumUser - Shipping tier indicator.
+       * @returns {number} The final calculated total price for the order.
+       */
+      function calculateOrderTotal(
+        price,
+        quantity,
+        discountPercentage,
+        isPremiumUser,
+      ) {
+        // 1. Guard Clauses (Input Validation)
+        if (price < 0 || quantity <= 0) {
+          return 0;
+        }
+
+        // 2. Logic Processing
+        let subtotal = price * quantity; // Calculate subtotal
+        let discount = subtotal * (discountPercentage / 100); // Calculate discount
+        let shippingFee = isPremiumUser ? 0 : 5; // Determine shipping fee
+
+        // 3. Return the final result
+        return subtotal - discount + shippingFee;
+      }
+
+      // ==========================================
+      // TEST CASES
+      // ==========================================
+
+      // Case 1: Normal user buys 2 items ($100 each), 10% discount, pays $5 shipping.
+      // Expected: (100 * 2) * 0.9 + 5 = 185
+      let order1 = calculateOrderTotal(100, 2, 10, false);
+      console.log(
+        "Test Case 1 - Standard User:",
+        order1 === 185 ? "PASSED" : "FAILED (Expected 185, got " + order1 + ")",
+      );
+
+      // Case 2: Premium user buys 1 item ($500), 20% discount, free shipping.
+      // Expected: (500 * 1) * 0.8 + 0 = 400
+      let order2 = calculateOrderTotal(500, 1, 20, true);
+      console.log(
+        "Test Case 2 - Premium User:",
+        order2 === 400 ? "PASSED" : "FAILED (Expected 400, got " + order2 + ")",
+      );
+
+      // Case 3: Invalid input testing (Defensive coding check)
+      // Expected: Should return 0 due to invalid quantity
+      let order3 = calculateOrderTotal(50, -1, 0, false);
+      console.log(
+        "Test Case 3 - Invalid Input:",
+        order3 === 0 ? "PASSED" : "FAILED (Expected 0, got " + order3 + ")",
+      );
+    </script>
+  </body>
+</html>
