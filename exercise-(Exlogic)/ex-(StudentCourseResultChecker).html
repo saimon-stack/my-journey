@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Course Result Checker</title>
+</head>
+<body>
+    <script>
+            /**
+             * Checks if a student passes a course based on their exam score and attendance.
+             * Standardized for school management systems.
+             * 
+             * @param {number} examScore - The student's final exam score (0 to 10).
+             * @param {number} attendancePercentage - The attendance rate (0 to 100).
+             * @returns {string} The final status ("INVALID", "FAILED_ATTENDANCE", "FAILED_SCORE", or "PASSED").
+             */
+            function checkCourseResult(examScore, attendancePercentage) {
+                // 1. Guard Clause (Input validation)
+                if (examScore < 0 || examScore > 10 || attendancePercentage < 0 || attendancePercentage > 100) {
+                    return "INVALID";
+                }
+
+                // 2. Logic Processing
+                if (attendancePercentage < 75) {
+                    return "FAILED_ATTENDANCE";
+                } else if (examScore < 5) {
+                    return "FAILED_SCORE";
+                } else {
+                    return "PASSED";
+                }
+            }
+
+            // ==========================================
+            // TEST CASES
+            // ==========================================
+
+            // Case 1: High attendance (90%), high score (8.5). 
+            // Expected: "PASSED"
+            let student1 = checkCourseResult(8.5, 90);
+            console.log("Test Case 1:", student1 === "PASSED" ? "PASSED" : "FAILED (Got: " + student1 + ")");
+
+            // Case 2: High score (9.5) but poor attendance (60% < 75%).
+            // Expected: "FAILED_ATTENDANCE"
+            let student2 = checkCourseResult(9.5, 60);
+            console.log("Test Case 2:", student2 === "FAILED_ATTENDANCE" ? "PASSED" : "FAILED (Got: " + student2 + ")");
+
+            // Case 3: Good attendance (95%) but low exam score (4.0 < 5.0).
+            // Expected: "FAILED_SCORE"
+            let student3 = checkCourseResult(4.0, 95);
+            console.log("Test Case 3:", student3 === "FAILED_SCORE" ? "PASSED" : "FAILED (Got: " + student3 + ")");
+
+            // Case 4: Invalid score input (12 out of 10).
+            // Expected: "INVALID"
+            let student4 = checkCourseResult(12, 90);
+            console.log("Test Case 4:", student4 === "INVALID" ? "PASSED" : "FAILED (Got: " + student4 + ")");
+    </script>
+</body>
+</html>
