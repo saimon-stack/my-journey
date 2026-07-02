@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>temperature converter</title>
+    </head>
+    <body>
+        <script>
+            /**
+             * temperature unit converter
+             * Standardized for school use
+             * @param {number} celsius - The temperature in Celsius to be converted.
+             * @returns {number} The converted temperature in Fahrenheit.
+             */
+            function celsiusToFahrenheit(celsius) {
+                // 1. Guard Clause (Input validation)
+                if (typeof celsius !== 'number') {
+                    throw new Error("Invalid input: Celsius temperature must be a number.");
+                }
+                // 2. Conversion Logic
+                return (celsius * 9/5) + 32;
+            }  
+
+            // ==========================================
+            // TEST CASES 
+            // ==========================================
+
+            // Case 1: Convert 0°C to Fahrenheit.
+            // Expected: 32°F
+            let temp1 = celsiusToFahrenheit(0);
+            console.log("Test Case 1:", temp1 === 32 ? "PASSED" : "FAILED (Got: " + temp1 + ")");
+
+            // Case 2: Convert 100°C to Fahrenheit.
+            // Expected: 212°F
+            let temp2 = celsiusToFahrenheit(100);
+            console.log("Test Case 2:", temp2 === 212 ? "PASSED" : "FAILED (Got: " + temp2 + ")");
+
+            // Case 3: Convert -40°C to Fahrenheit.
+            // Expected: -40°F 
+            let temp3 = celsiusToFahrenheit(-40);
+            console.log("Test Case 3:", temp3 === -40 ? "PASSED" : "FAILED (Got: " + temp3 + ")");
+
+            // Case 4: Invalid input (string instead of number).
+            // Expected: Error thrown
+            try {
+                celsiusToFahrenheit("not a number");
+                console.log("Test Case 4: FAILED (No error thrown for invalid input)");
+            } catch (error) {
+                console.log("Test Case 4: PASSED (Error thrown as expected)");
+            }
+            
+        </script>
+   </body>
+</html>
+    
