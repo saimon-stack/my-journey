@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>convertLength</title>
+    </head>
+    <body>
+    <script>
+        /**
+         * Takes a number and a unit ( "km" or "miles") and converts the number to the other unit.
+         * Standardized for school use
+         * NOTE: 1 mile = 1.60934 km
+         * @param {number} length - The numeric value to be converted.
+         * @param {string} from - The unit of the input length ("km" or "miles").
+         * @param {string} to - The unit to convert to ("km" or "miles").
+         * @returns {number} The converted length in the specified unit.
+         */
+        function convertLength(length, from, to) {
+            // 1. Guard Clause (Input validation)
+            if (typeof length !== 'number' || length < 0) {
+                throw new Error("Invalid input: Length must be a non-negative number.");
+            }
+            if ((from !== "km" && from !== "miles") || (to !== "km" && to !== "miles")) {
+                throw new Error("Invalid input: Units must be either 'km' or 'miles'.");
+            }
+
+            // 2. Conversion Logic
+            if (from === "km" && to === "miles") {
+                return length * 0.621371; // Convert km to miles
+            } else if (from === "miles" && to === "km") {
+                return length / 0.621371; // Convert miles to km
+            } else {
+                return length; // No conversion needed if units are the same
+            }
+        }
+
+        // ==========================================
+        // TEST CASES
+        // ==========================================
+        // Case 1: Convert 5 km to miles.
+        // Expected: 3.106855 miles
+            let length1 = convertLength(5, "km", "miles");
+            console.log("Test Case 1:", Math.abs(length1 - 3.106855) < 0.0001 ? "PASSED" : "FAILED (Got: " + length1 + ")");
+
+        // Case 2: Convert 3.106855 miles to km.
+        // Expected: 5 km
+            let length2 = convertLength(3.106855, "miles", "km");
+            console.log("Test Case 2:", Math.abs(length2 - 5) < 0.0001 ? "PASSED" : "FAILED (Got: " + length2 + ")");
+
+        // Case 3: Invalid input (negative length).
+        // Expected: Error thrown
+            try {
+                convertLength(-5, "km", "miles");
+                console.log("Test Case 3: FAILED (No error thrown for negative length)");
+            } catch (error) {
+                console.log("Test Case 3: PASSED (Error thrown as expected)");
+            }
+
+        //case 4: Invalid input (invalid unit).
+        // Expected: Error thrown
+            try {
+                convertLength(5, "meters", "miles");
+                console.log("Test Case 4: FAILED (No error thrown for invalid unit)");
+            } catch (error) {
+                console.log("Test Case 4: PASSED (Error thrown as expected)");
+            }
+    </script>
+  </body>
+</html>
