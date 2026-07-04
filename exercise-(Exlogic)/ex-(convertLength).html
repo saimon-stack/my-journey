@@ -8,31 +8,68 @@
     <body>
     <script>
         /**
-         * Takes a number and a unit ( "km" or "miles") and converts the number to the other unit.
+         * Takes a number and a unit ( "km" or "miles" or "meters" or "feet") and converts the number to the other unit.
          * Standardized for school use
-         * NOTE: 1 mile = 1.60934 km
+         * NOTE: conversion formula
+         * 2.1: 1km = 0.62137119 miles , 1 mile = 1.60934 km
+         * 2.2: 1km = 3280.8399 feet , 1 feet = 0.0003048 km
+         * 2.3: 1km = 1000 meters , 1 meter = 0.001 km
+         * 2.4: 1 mile = 5280 feet , 1 feet = 0.000189394 miles
+         * 2.5: 1 mile = 1609.34 meters , 1 meter = 0.000621371 miles
+         * 2.6: 1 feet = 0.3048 meters , 1 meter = 3.28084 feet
          * @param {number} length - The numeric value to be converted.
-         * @param {string} from - The unit of the input length ("km" or "miles").
-         * @param {string} to - The unit to convert to ("km" or "miles").
-         * @returns {number} The converted length in the specified unit.
+         * @param {string} from - The unit of the input length ("km" or "miles" or "feet" or "meters").
+         * @param {string} to - The unit to convert to ("km" or "miles" or "feet" or "meters").
+         * @returns {number} - The converted length in the specified unit.
          */
-        function convertLength(length, from, to) {
-            // 1. Guard Clause (Input validation)
-            if (typeof length !== 'number' || length < 0) {
-                throw new Error("Invalid input: Length must be a non-negative number.");
-            }
-            if ((from !== "km" && from !== "miles") || (to !== "km" && to !== "miles")) {
-                throw new Error("Invalid input: Units must be either 'km' or 'miles'.");
-            }
+                function convertLength(length, from, to) {
+                    // 1. Guard Clause (Input validation)
+                    if (typeof length !== 'number' || length < 0) {
+                        throw new Error("Invalid input: Length must be a non-negative number.");
+                    }
+                    if ((from !== "km" && from !== "miles" && from !== "feet" && from !== "meters") || (to !== "km" && to !== "miles" && to !== "feet" && to !== "meters")) {
+                        throw new Error("Invalid input: Units must be either 'km', 'miles', 'feet', or 'meters'.");
+                    }
 
             // 2. Conversion Logic
-            if (from === "km" && to === "miles") {
-                return length * 0.621371; // Convert km to miles
-            } else if (from === "miles" && to === "km") {
-                return length / 0.621371; // Convert miles to km
-            } else {
-                return length; // No conversion needed if units are the same
-            }
+                    // 2.1 conert km and miles
+                    if (from === "km" && to === "miles") {
+                        return length * 0.62137119; // Convert km to miles
+                    } else if (from === "miles" && to === "km") {
+                        return length / 0.62137119; // Convert miles to km
+
+                    // 2.2 convert km and feet
+                    } else if (from === "km" && to === "feet") {
+                        return length * 3280.8399; // Convert km to feet
+                    } else if (from === "feet" && to === "km") {
+                        return length / 3280.8399; // Convert feet to km
+
+                    // 2.3 convert km and meters
+                    } else if (from === "km" && to === "meters") {
+                        return length * 1000; // Convert km to meters
+                    } else if (from === "meters" && to === "km") {
+                        return length / 1000; // Convert meters to km
+
+                    // 2.4 convert miles and feet
+                    } else if (from === "miles" && to === "feet") {
+                        return length * 5280; // Convert miles to feet
+                    } else if (from === "feet" && to === "miles") {
+                        return length / 5280; // Convert feet to miles
+
+                    // 2.5 convert miles and meters
+                    } else if (from === "miles" && to === "meters") {
+                        return length * 1609.34; // Convert miles to meters
+                    } else if (from === "meters" && to === "miles") {
+                        return length / 1609.34; // Convert meters to miles
+
+                    // 2.6 convert feet and meters
+                    } else if (from === "feet" && to === "meters") {
+                        return length * 0.3048; // Convert feet to meters
+                    } else if (from === "meters" && to === "feet") {
+                        return length / 0.3048; // Convert meters to feet
+                    } else {
+                        return length;
+                    }
         }
 
         // ==========================================
@@ -48,23 +85,76 @@
             let length2 = convertLength(3.106855, "miles", "km");
             console.log("Test Case 2:", Math.abs(length2 - 5) < 0.0001 ? "PASSED" : "FAILED (Got: " + length2 + ")");
 
-        // Case 3: Invalid input (negative length).
+        // Case 3: convert 5 km to feet
+        // Expected: 16404.1995 feet
+            let length3 = convertLength(5, "km", "feet");
+            console.log("Test Case 3:", Math.abs(length3 - 16404.1995) < 0.0001 ? "PASSED" : "FAILED (Got: " + length3 + ")");
+
+        // Case 4: convert 5 feet to km
+        // Expected: 0.001524 km
+            let length4 = convertLength(5, "feet", "km");
+            console.log("Test Case 4:", Math.abs(length4 - 0.001524) < 0.0001 ? "PASSED" : "FAILED (Got: " + length4 + ")");
+
+        // Case 5: convert 5 km to meters
+        // Expected: 5000 meters
+            let length5 = convertLength(5, "km", "meters");
+            console.log("Test Case 5:", Math.abs(length5 - 5000) < 0.0001 ? "PASSED" : "FAILED (Got: " + length5 + ")");
+
+        // Case 6: convert 5 meters to km
+        // Expected: 0.005 km
+            let length6 = convertLength(5, "meters", "km");
+            console.log("Test Case 6:", Math.abs(length6 - 0.005) < 0.0001 ? "PASSED" : "FAILED (Got: " + length6 + ")");
+
+        // Case 7: convert 5 miles to feet
+        // Expected: 26400 feet
+            let length7 = convertLength(5, "miles", "feet");
+            console.log("Test Case 7:", Math.abs(length7 - 26400) < 0.0001 ? "PASSED" : "FAILED (Got: " + length7 + ")");
+
+        // Case 8: convert 5 feet to miles
+        // Expected: 0.00094697 miles
+            let length8 = convertLength(5, "feet", "miles");
+            console.log("Test Case 8:", Math.abs(length8 - 0.00094697) < 0.0001 ? "PASSED" : "FAILED (Got: " + length8 + ")");
+
+        // Case 9: convert 5 miles to meters
+        // Expected: 8046.7 meters
+            let length9 = convertLength(5, "miles", "meters");
+            console.log("Test Case 9:", Math.abs(length9 - 8046.7) < 0.0001 ? "PASSED" : "FAILED (Got: " + length9 + ")");
+
+        // Case 10: convert 5 meters to miles
+        // Expected: 0.00310686 miles
+            let length10 = convertLength(5, "meters", "miles");
+            console.log("Test Case 10:", Math.abs(length10 - 0.00310686) < 0.0001 ? "PASSED" : "FAILED (Got: " + length10 + ")");
+
+        // Case 11: convert 5 feet to meters
+        // Expected: 1.524 meters
+            let length11 = convertLength(5, "feet", "meters");
+            console.log("Test Case 11:", Math.abs(length11 - 1.524) < 0.0001 ? "PASSED" : "FAILED (Got: " + length11 + ")");
+
+        // Case 12: convert 5 meters to feet
+        // Expected: 16.4042 feet
+            let length12 = convertLength(5, "meters", "feet");
+            console.log("Test Case 12:", Math.abs(length12 - 16.4042) < 0.0001 ? "PASSED" : "FAILED (Got: " + length12 + ")");
+
+        // Case 13: invalid input (negative length).
         // Expected: Error thrown
             try {
                 convertLength(-5, "km", "miles");
-                console.log("Test Case 3: FAILED (No error thrown for negative length)");
+                console.log("Test Case 13: FAILED (No error thrown for negative length)");
             } catch (error) {
-                console.log("Test Case 3: PASSED (Error thrown as expected)");
+                console.log("Test Case 13: PASSED (Error thrown as expected)");
             }
-
-        //case 4: Invalid input (invalid unit).
+        // Case 14: invalid input (invalid unit).
         // Expected: Error thrown
             try {
-                convertLength(5, "meters", "miles");
-                console.log("Test Case 4: FAILED (No error thrown for invalid unit)");
+                convertLength(5, "meters", "yards");
+                console.log("Test Case 14: FAILED (No error thrown for invalid unit)");
             } catch (error) {
-                console.log("Test Case 4: PASSED (Error thrown as expected)");
+                console.log("Test Case 14: PASSED (Error thrown as expected)");
             }
+        // Case 15: invalid input (same unit).
+        // Expected: No conversion needed, return the same length
+            let length15 = convertLength(5, "km", "km");
+            console.log("Test Case 15:", length15 === 5 ? "PASSED" : "FAILED (Got: " + length15 + ")");
     </script>
   </body>
 </html>
