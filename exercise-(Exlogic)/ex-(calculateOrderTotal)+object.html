@@ -1,0 +1,86 @@
+ <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ex calculatorOrderTotal</title>                                       
+    </head>
+    <body>
+        <button  >hello</button>
+        <script>
+             /**
+             * Calculates the final total for an e-commerce order using an order object.
+             * Standardized for modern enterprise checkout systems.
+             * * @param {Object} order - The order details containing subtotal, couponCode, and membership status.
+             * @param {number} order.subtotal - The initial cost of items.
+             * @param {string} order.couponCode - The discount coupon applied.
+             * @param {boolean} order.isPremiumMember - Premium membership status indicator.
+             * @returns {number} The final calculated order total.
+             */
+            function calculateOrderTotal(order) {
+                // 1. Guard Clause
+                if (!order || order.subtotal < 0) {
+                    return 0;
+                }
+
+                // 2. Logic Processing
+                let finalSubtotal = order.subtotal;
+
+                // Apply 20% discount if order.couponCode is "SALE20"
+                if (order.couponCode === "SALE20") {
+                    finalSubtotal = finalSubtotal * 0.8; 
+                }
+
+                //  Determine shipping fee ($0 for premium, $5 for regular)
+                let shippingFee = 0;
+                if (order.isPremiumMember === false) {
+                    shippingFee = 5;
+                }
+                
+                // 3. Return the final total (discounted subtotal + shipping fee)
+                return finalSubtotal + shippingFee;
+            }
+
+                // ==========================================
+                // TEST CASES
+                // ==========================================
+
+                // Case 1: Regular member, no coupon. Pay full subtotal ($100) + $5 shipping.
+                // Expected: 105
+                const order1 = {
+                    subtotal: 100,
+                    couponCode: "",
+                    isPremiumMember: false
+                };
+                let total1 = calculateOrderTotal(order1);
+                console.log("Test Case 1:", total1 === 105 ? "PASSED" : "FAILED (Got: " + total1 + ")");
+
+                // Case 2: Premium member, using "SALE20" coupon. 
+                // Subtotal after coupon: 200 - 20% = 160. Shipping: $0.
+                // Expected: 160
+                const order2 = {
+                    subtotal: 200,
+                    couponCode: "SALE20",
+                    isPremiumMember: true
+                };
+                let total2 = calculateOrderTotal(order2);
+                console.log("Test Case 2:", total2 === 160 ? "PASSED" : "FAILED (Got: " + total2 + ")");
+
+                // Case 3: Regular member, using "SALE20" coupon.
+                // Subtotal after coupon: 50 - 20% = 40. Shipping: $5.
+                // Expected: 45
+                const order3 = {
+                    subtotal: 50,
+                    couponCode: "SALE20",
+                    isPremiumMember: false
+                };
+                let total3 = calculateOrderTotal(order3);
+                console.log("Test Case 3:", total3 === 45 ? "PASSED" : "FAILED (Got: " + total3 + ")");
+
+                // Case 4: Invalid order defense (Guard clause test).
+                // Expected: 0
+                let total4 = calculateOrderTotal(null);
+                console.log("Test Case 4:", total4 === 0 ? "PASSED" : "FAILED (Got: " + total4 + ")");
+        </script>
+    </body>
+    </html>
