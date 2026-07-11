@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Like Button</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8fafc;
+            font-family: system-ui, sans-serif;
+        }
+
+        /* Styling the like button */
+        #like-btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            border: 2px solid #cbd5e1;
+            border-radius: 50px;
+            background-color: white;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Class active will be added/removed by JavaScript */
+        #like-btn.liked {
+            background-color: #ffe4e6;
+            border-color: #f43f5e;
+            color: #f43f5e;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="like-btn">🤍 Like</button>
+
+    <script>
+        // 1. Select the button
+        const likeBtn = document.getElementById("like-btn");
+
+        // 2. Listen for the click event
+        likeBtn.addEventListener("click", function() {
+            
+            // 3. Toggle the "liked" class in CSS and change text
+            const isNowLiked = likeBtn.classList.toggle("liked");
+
+            if (isNowLiked) {
+                likeBtn.textContent = "❤️ Liked";
+            } else {
+                likeBtn.textContent = "🤍 Like";
+            }
+        });
+    </script>
+</body>
+</html>
