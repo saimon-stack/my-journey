@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter</title>
+</head>
+<body>
+    <h2>Enter your name:</h2>
+    
+    <!-- UI: Input field for user text entry -->
+    <input type="text" id="text-input" placeholder="Type something here..." />
+
+    <!-- UI: Display area for the dynamic character count -->
+    <p>Characters typed: <span id="char-count">0</span></p>
+
+    <script>
+        // DOM Elements selection
+        const inputField = document.getElementById("text-input");
+        const charCount = document.getElementById("char-count");
+
+        // Event listener for real-time text input tracking
+        inputField.addEventListener("input", function() {
+            // Retrieve the current string value from the input field
+            const currentText = inputField.value;
+            
+            // Calculate the total number of characters
+            const textLength = currentText.length;
+            
+            // Update the DOM to display the new count
+            charCount.textContent = textLength;
+        }
+    )      
+    </script>
+</body>
+</html>
