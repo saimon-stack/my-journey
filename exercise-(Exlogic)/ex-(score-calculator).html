@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Score Calculator</title>
+</head>
+<body>
+    <h2>Admission Score Checker 🎓</h2>
+    
+    <!-- Input fields for 3 subjects -->
+    <div>
+        <label>Math:</label>
+        <input type="number" id="math-score" placeholder="0" />
+    </div>
+    <div>
+        <label>Physics:</label>
+        <input type="number" id="physics-score" placeholder="0" />
+    </div>
+    <div>
+        <label>Chemistry:</label>
+        <input type="number" id="chemistry-score" placeholder="0" />
+    </div>
+    <br>
+
+    <!-- Action button -->
+    <button id="calc-btn">Calculate Total</button>
+
+    <!-- Result display -->
+    <h3>Total Score: <span id="total-score">0</span></h3>
+
+    <script>
+       
+
+        const math = document.getElementById("math-score");
+        const physic = document.getElementById("physics-score");
+        const chemistry = document.getElementById("chemistry-score");
+        const calcBtn = document.getElementById("calc-btn");
+        const totalScore = document.getElementById("total-score");
+
+     // Event listener for calculation button click
+    calcBtn.addEventListener("click", function() {
+        // Fetch and convert current input values to numbers inside the event
+        const mathScore = Number(math.value);
+        const physicScore = Number(physic.value);
+        const chemistryScore = Number(chemistry.value);
+
+        // Validation logic: Check if any score is out of the valid range (0 - 10)
+        if (mathScore < 0 || mathScore > 10 || 
+            physicScore < 0 || physicScore > 10 || 
+            chemistryScore < 0 || chemistryScore > 10) {
+            
+            // Alert the user and stop execution
+            totalScore.textContent = "Invalid score! (Must be between 0 and 10)";
+            return; 
+        }
+            
+        // Calculate and display the total sum
+        totalScore.textContent = mathScore + physicScore + chemistryScore;
+    });
+    </script>
+</body>
+</html>
