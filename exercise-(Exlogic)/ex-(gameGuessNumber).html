@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        /* Styles for different game outcomes */
+        .hint { color: blue; }
+        .win { color: green; font-weight: bold; font-size: 1.2rem; }
+        .lose { color: red; font-weight: bold; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <h2>Guess My Number (1 - 100) </h2>
+    <p>You have <span id="attempts-left">7</span> attempts remaining.</p>
+
+    <!-- Input for the user's guess -->
+    <input type="number" id="guess-input" placeholder="Enter 1-100" />
+    <button id="guess-btn">Guess</button>
+
+    <!-- Feedback message area -->
+    <p id="feedback-display"></p>
+
+    <script>
+        
+        const  guessInput = document.getElementById("guess-input")
+        const guessBtn = document.getElementById("guess-btn")
+        const turn = document.getElementById("attempts-left")
+        const feedbackDisplay = document.getElementById("feedback-display")
+        // 1. SYSTEM SETUP
+        // Generates a random integer between 1 and 100
+        const secretNumber = Math.floor(Math.random() * 100) + 1;
+        // Tracks the remaining attempts
+        let attemptsLeft = 7;
+        // 2. DOM SELECTION
+        guessBtn.addEventListener("click" , function() {
+
+            const userChoice = Number(guessInput.value)
+
+            if (userChoice < 1 || userChoice > 100) {
+                return feedbackDisplay.textContent = "values ​​from 1 to 100";
+            }
+
+            attemptsLeft -= 1;
+            turn.textContent = attemptsLeft;
+
+             if ( userChoice === secretNumber ){
+                feedbackDisplay.textContent = "Congratulations! You guessed it!" 
+                feedbackDisplay.className = "win" 
+                return;
+            }else if ( userChoice > secretNumber ){
+                feedbackDisplay.textContent = "Too high!"
+                feedbackDisplay.className = "hint"
+            }else {
+                feedbackDisplay.textContent = "Too low!"
+                feedbackDisplay.className = "hint"
+            };
+
+            if (attemptsLeft <= 0){
+                feedbackDisplay.textContent = "game over"
+                feedbackDisplay.className = "lose"
+                return;
+            }
+        });
+
+        guessInput.addEventListener("keydown", function(event) { 
+            if (event.key === "Enter") { 
+            guessBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
