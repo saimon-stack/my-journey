@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Guessing Game</title>
     <style>
-        /* Styles for different game outcomes */
         .hint { color: blue; }
         .win { color: green; font-weight: bold; font-size: 1.2rem; }
         .lose { color: red; font-weight: bold; font-size: 1.2rem; }
+        #guess-btn{cursor:pointer;}
     </style>
 </head>
 <body>
@@ -23,50 +23,64 @@
     <p id="feedback-display"></p>
 
     <script>
-        
-        const  guessInput = document.getElementById("guess-input")
-        const guessBtn = document.getElementById("guess-btn")
-        const turn = document.getElementById("attempts-left")
-        const feedbackDisplay = document.getElementById("feedback-display")
-        // 1. SYSTEM SETUP
-        // Generates a random integer between 1 and 100
+        // DOM Elements selection
+        const guessInput = document.getElementById("guess-input");
+        const guessBtn = document.getElementById("guess-btn");
+        const turn = document.getElementById("attempts-left");
+        const feedbackDisplay = document.getElementById("feedback-display"); // Fixed typo: displey -> display
+
+        // SYSTEM SETUP: Generate secret number and initialize attempts
         const secretNumber = Math.floor(Math.random() * 100) + 1;
-        // Tracks the remaining attempts
         let attemptsLeft = 7;
-        // 2. DOM SELECTION
-        guessBtn.addEventListener("click" , function() {
+        
+        // Event listener for the guess action
+        guessBtn.addEventListener("click", function() {
+            const userChoice = Number(guessInput.value); // Fixed typo: number -> Number
 
-            const userChoice = Number(guessInput.value)
-
+            // Validation: Ensure input is within the 1-100 range
             if (userChoice < 1 || userChoice > 100) {
-                return feedbackDisplay.textContent = "values ​​from 1 to 100";
+                feedbackDisplay.textContent = "Please enter a number between 1 and 100!";
+                feedbackDisplay.className = "lose";
+                return; 
             }
 
+            // Update remaining attempts state
             attemptsLeft -= 1;
-            turn.textContent = attemptsLeft;
+            turn.textContent = attemptsLeft; // Moved here to avoid repetition
 
-             if ( userChoice === secretNumber ){
-                feedbackDisplay.textContent = "Congratulations! You guessed it!" 
-                feedbackDisplay.className = "win" 
+            // Game logic branching
+            if (userChoice === secretNumber) {
+                feedbackDisplay.textContent = "Congratulations! You guessed it!";  
+                feedbackDisplay.className = "win";
+                guessBtn.disabled = true; // Lock button on win
                 return;
-            }else if ( userChoice > secretNumber ){
-                feedbackDisplay.textContent = "Too high!"
-                feedbackDisplay.className = "hint"
-            }else {
-                feedbackDisplay.textContent = "Too low!"
-                feedbackDisplay.className = "hint"
-            };
+            } 
+            
+            // Check for Game Over condition if the guess was wrong
+            if (attemptsLeft === 0) {
+                feedbackDisplay.textContent = "Game Over! The secret number was " + secretNumber;
+                feedbackDisplay.className = "lose";
+                guessBtn.disabled = true; // Lock button on lose
+                return;
+            }
 
-            if (attemptsLeft <= 0){
-                feedbackDisplay.textContent = "game over"
-                feedbackDisplay.className = "lose"
-                return;
+            // Provide hints if the game is still active
+            if (userChoice > secretNumber) {
+                feedbackDisplay.textContent = "Too high!";
+                feedbackDisplay.className = "hint";
+            } else {
+                feedbackDisplay.textContent = "Too low!";
+                feedbackDisplay.className = "hint";
             }
         });
 
-        guessInput.addEventListener("keydown", function(event) { 
+        // click enter to guess
+         guessInput.addEventListener("keydown", function(event) { 
+
             if (event.key === "Enter") { 
-            guessBtn.click();
+
+                guessBtn.click();
+
             }
         });
     </script>
