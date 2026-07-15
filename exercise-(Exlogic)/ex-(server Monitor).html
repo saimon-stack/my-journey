@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Server Monitor</title>      
+    <style>
+        /* General styles for the entire page */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 15px; 
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        /* Styles for wrapper blocks */
+        div {
+            margin: 14px 0;
+        }
+
+        /* Styles for input labels */
+        label {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        /* Set specific width for the temperature input */
+        #temperature-input {
+            width: 100px;
+        }
+
+        /* Pointer cursor for interactive elements */
+        #door-status {
+            cursor: pointer;
+        }
+
+        /* Modern and professional button styling */
+        button {
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 5px;  
+            padding: 6px 12px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+        }
+
+        button:hover {
+            background-color: #d0d0d0;
+        }
+
+        /* Styles for status display values */
+        .status-value {
+            font-weight: normal;
+            color: #666;
+            margin-left: 5px;
+        }
+    </style>     
+</head>
+<body>
+    <main>
+        <h1>Server Monitor</h1>
+        
+        <div>
+            <label for="temperature-input">Temperature:</label>
+            <input type="number" id="temperature-input" placeholder="10°C to 100°C" />
+        </div>
+        
+        <div>
+            <label for="electric-pc">Electric power consumption:</label>
+            <input type="number" id="electric-pc" placeholder="Power consumption (kW)" />
+        </div>
+        
+        <div>
+            <label for="door-status">Room door status:</label>
+            <select id="door-status">
+                <option value="closed">Closed</option>
+                <option value="open">Open</option>
+            </select>
+        </div>
+        
+        <div>
+            <button type="button" id="update-btn">Update</button>
+        </div>
+        
+        <div>
+            <label>Cooling system:</label>
+            <span id="cooling-status" class="status-value">--</span>
+        </div>
+        
+        <div>
+            <label>Siren:</label>
+            <span id="siren-status" class="status-value">--</span>
+        </div>
+    </main>
+
+    <script>
+    </script>
+</body>
+</html>
