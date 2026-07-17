@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Server Monitor</title>      
     <style>
-        /* General styles for the entire page */
+        /* ==========================================
+           1. GENERAL STYLES & LAYOUT
+           ========================================== */
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             padding: 15px; 
@@ -15,23 +17,25 @@
             background-color: #fafafa;
         }
 
-        /* Styles for wrapper blocks */
+        /* Container spacing for form elements */
         div {
             margin: 14px 0;
         }
 
-        /* Styles for input labels */
+        /* ==========================================
+           2. FORM ELEMENTS & COMPONENTS
+           ========================================== */
         label {
             display: inline-block;
             margin-right: 8px;
         }
 
-        /* Set specific width for the temperature input */
+        /* Set specific width to prevent UI shifting */
         #temperature-input {
             width: 100px;
         }
 
-        /* Pointer cursor for interactive elements */
+        /* Pointer cursor for better UX on interactive elements */
         #door-status {
             cursor: pointer;
         }
@@ -48,53 +52,85 @@
             background-color: #e0e0e0;
         }
 
+        /* Hover effect for better feedback */
         button:hover {
             background-color: #d0d0d0;
         }
 
-        /* Styles for status display values */
+        /* ==========================================
+           3. TYPOGRAPHY & STATUS COLORS
+           ========================================== */
+        /* Default styling for status outputs */
         .status-value {
             font-weight: normal;
             color: #666;
             margin-left: 5px;
         }
 
-        #info-status1{
-            color:#f80c0c;
+        /* Error message styling */
+        #info-status1, #info-status2 {
+            color: #f80c0c;
             font-size: 11px;
-            margin-left: 170px;
-        }
-        #info-status2{
-            color:#f80c0c;
-            font-size: 11px;
-            margin-left:25px;
+            margin: 5px 0 0 0;
         }
 
-        .cooling-mode{
+        /* Dynamic classes applied via JavaScript */
+        .cooling-mode {
             font-weight: bold;
         }
 
-        .danger{ color:#f80c0c;}
-        .warning{ color:#fff200;}
-        .safe{ color:#00f539;}
+        /* Instructions / Rules Box */
+        .instructions-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #0284c7;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .instructions-box h3 {
+            margin: 0 0 8px 0;
+            font-size: 15px;
+            color: #0284c7;
+        }
+
+        .instructions-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .instructions-box li {
+            margin-bottom: 4px;
+        }
+        
+        .danger { color: #f80c0c; }
+        .warning { color: #d97706; }
+        .safe { color: #00f539; }
     </style>     
 </head>
 <body>
     <main>
         <h1>Server Monitor</h1>
         
+        <!-- === INPUT SECTION === -->
+        
+        <!-- Temperature Input -->
         <div>
             <label for="temperature-input">Temperature:</label>
             <input type="number" id="temperature-input" placeholder="10°C to 100°C" />
-            <label id ="info-status1"></label>
+            <p id="info-status1"></p>
         </div>
         
+        <!-- Electricity Consumption Input -->
         <div>
-            <label for="electric-pc">Electricity consumption:</label>
-            <input type="number" id="Electricity-consumption" placeholder="Power consumption (kW)" />
-            <label id ="info-status2"></label>
+            <label for="electricity-consumption">Electricity consumption:</label>
+            <input type="number" id="electricity-consumption" placeholder="Power consumption (kW)" />
+            <p id="info-status2"></p>
         </div>
         
+        <!-- Room Door Status Dropdown -->
         <div>
             <label for="door-status">Room door status:</label>
             <select id="door-status">
@@ -103,10 +139,12 @@
             </select>
         </div>
         
+        <!-- === ACTION SECTION === -->
         <div>
             <button type="button" id="update-btn">Update</button>
         </div>
         
+        <!-- === OUTPUT / MONITORING SECTION === -->
         <div>
             <label>Cooling system:</label>
             <span id="cooling-status" class="status-value">--</span>
@@ -116,79 +154,122 @@
             <label>Siren:</label>
             <span id="siren-status" class="status-value">--</span>
         </div>
-    </main>
-    <script>
 
+        <!-- === INSTRUCTIONS / HOW IT WORKS === -->
+        <div class="instructions-box">
+            <h3>⚙️ System Rules</h3>
+            <ul>
+                <li><strong>Cooling:</strong> Normal (24°C - 35°C) | Rapid Mode (> 35°C).</li>
+                <li><strong>Danger (🚨):</strong> Triggered if Temp > 45°C OR Power > 50kW.</li>
+                <li><strong>Warning (⚠):</strong> Triggered if the Server Room door is left Open.</li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. DOM ELEMENT SELECTIONS
+        // ==========================================
         const temperatureInput = document.getElementById("temperature-input");
-        const ElectricityConsumption = document.getElementById("Electricity-consumption");
+        const electricityConsumption = document.getElementById("electricity-consumption");
         const doorStatus = document.getElementById("door-status");
         const updateBtn = document.getElementById("update-btn");
         const coolingStatus = document.getElementById("cooling-status");
         const sirenStatus = document.getElementById("siren-status");
-        const infoStatus1 = document.getElementById("info-status1")
-        const infoStatus2 = document.getElementById("info-status2")
+        const infoStatus1 = document.getElementById("info-status1");
+        const infoStatus2 = document.getElementById("info-status2");
 
+        // ==========================================
+        // 2. MAIN SYSTEM LOGIC (UPDATE EVENT)
+        // ==========================================
         updateBtn.addEventListener("click", function() {
 
+            // Extract values and convert inputs to numbers for logic evaluation
             const temperatureInputVL = Number(temperatureInput.value);
-            const ElectricityConsumptionVL = Number(ElectricityConsumption.value);
+            const electricityConsumptionVL = Number(electricityConsumption.value);
             const doorStatusVL = doorStatus.value;
 
-            if (temperatureInputVL < 10 || temperatureInputVL > 100){
-                infoStatus1.textContent = "❗❗❗ VALUE 10°C TO 100°C"
+            // Reset error messages from previous execution
+            infoStatus1.textContent = "";
+            infoStatus2.textContent = "";
+
+            // Reset the results screen
+            coolingStatus.textContent = "--";
+            coolingStatus.className = "status-value";
+
+            sirenStatus.textContent = "--";
+            sirenStatus.classList.remove("safe", "warning", "danger");
+           
+
+            // Initialize error flag for form validation
+            let hasError = false;
+
+            // --- VALIDATION PHASE ---
+            
+            // Check for empty input or temperature out of safe operational range
+            if (temperatureInput.value === "" || temperatureInputVL < 10 || temperatureInputVL > 100) {
+                infoStatus1.textContent = "❗❗❗ PLEASE ENTER A VALUE (10°C TO 100°C)";
+                hasError = true;
+            }
+            
+            // Check for empty input or negative electricity consumption
+            if (electricityConsumption.value === "" || electricityConsumptionVL <= 0) {
+                infoStatus2.textContent = "❗❗❗ PLEASE ENTER VALID ELECTRICITY CONSUMPTION (> 0)";
+                hasError = true;
+            }
+
+            // Early return: Halt execution if any validation fails
+            if (hasError === true) {
                 return;
             }
-            if (ElectricityConsumptionVL < 0){
-                infoStatus2.textContent = "❗❗❗ ELECTRICITY CONSUMPTION MUST BE GREATER THAN ZERO."
-                return;
-            }
 
-            if ( temperatureInputVL < 24) {
-
-                coolingStatus.textContent = "OFF"
+            // --- COOLING SYSTEM LOGIC ---
+            
+            // Determine cooling requirements based on temperature thresholds
+            if (temperatureInputVL < 24) {
+                coolingStatus.textContent = "OFF";
                 coolingStatus.className = "cooling-mode";
-
-            } else if (temperatureInputVL >= 24 && temperatureInputVL <= 35){
-
-                coolingStatus.textContent = "ON (Normal difficulty)";
+            } else if (temperatureInputVL >= 24 && temperatureInputVL <= 35) {
+                coolingStatus.textContent = "ON (Normal Mode)";
                 coolingStatus.className = "cooling-mode";
-
             } else {
-
                 coolingStatus.textContent = "ON (Rapid Mode)";
                 coolingStatus.className = "cooling-mode";
-
             }
 
-            if ( temperatureInputVL > 45 || ElectricityConsumptionVL >50) {
-
-                sirenStatus.textContent = "🚨 DANGER"
-                sirenStatus.className = "danger"
-
-            }else if (doorStatusVL === "open"){
-
-                sirenStatus.textContent = "⚠ WARNING"
-                sirenStatus.className = "warning"
-
-            }else {
-           
-            sirenStatus.textContent = "✔ SAFE";
-            sirenStatus.className = "safe";
+            // --- SIREN ALARM LOGIC ---
+            
+            // Critical Priority: Check for critical limits (Danger)
+            if (temperatureInputVL > 45 || electricityConsumptionVL > 50) {
+                sirenStatus.textContent = "🚨 DANGER";
+                sirenStatus.classList.remove("safe", "warning", "danger");
+                sirenStatus.classList.add("danger");
                 
+            // Medium Priority: Check for security breaches (Warning)
+            } else if (doorStatusVL === "open") {
+                sirenStatus.textContent = "⚠ WARNING";
+                sirenStatus.classList.remove("safe", "warning", "danger");
+                sirenStatus.classList.add("warning");
+
+            // Low Priority: System is operating normally (Safe)
+            } else {
+                sirenStatus.textContent = "✔ SAFE";
+                sirenStatus.classList.remove("safe", "warning", "danger");
+                sirenStatus.classList.add("safe");
             }
 
-        }) 
+        }); 
         
-        // click enter to guess
-         document.addEventListener("keydown", function(event) { 
-
+        // ==========================================
+        // 3. ACCESSIBILITY / KEYBOARD SUPPORT
+        // ==========================================
+        // Allow users to trigger the update by pressing the 'Enter' key
+        document.addEventListener("keydown", function(event) { 
             if (event.key === "Enter") { 
-
-                event.preventDefault(); 
-                updateBtn.click();
-
+                event.preventDefault(); // Prevent default browser behavior (e.g., page reload)
+                updateBtn.click();      // Programmatically click the update button
             }
-            })
+        });
     </script>
 </body>
 </html>
