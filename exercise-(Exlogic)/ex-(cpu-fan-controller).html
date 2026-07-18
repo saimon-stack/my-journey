@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CPU fan controller</title>      
+    <style>
+         body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 15px; 
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        div{
+            margin: 16px 0;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        #temperature{
+            width:100px
+        }
+
+         button {
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 5px;  
+            padding: 6px 12px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e0e0e0;
+            transition:opacity 0.20s;
+        }
+
+        button:hover {
+            opacity:0.8;
+        }
+
+        button:active{
+            opacity:0.5;
+        }
+
+        #info-status{
+            color: #f80c0c;
+            font-size: 12px;
+            margin: 5px 0 0 0;
+        }
+
+        .safe { color: #00f539; }
+    </style>     
+</head>
+<body>
+    <h1>CPU fan controller</h1>
+    <div>
+        <label for="temperature-input">CPU temperature:</label>
+        <input type="number" id="temperature-input" placeholder="0°C to 120°C">
+        <p id="info-status"></p>
+    </div>
+
+    <div>
+        <label for="mode">CPU mode:</label>
+        <select id="mode">
+                <option value="normal">Normal mode</option>
+                <option value="gamming">Gamming mode</option>
+        </select>
+    </div>
+
+    <div>
+        <button id="update-btn">update</button>
+    </div>
+
+    <div>
+       <label for="fan-speed"> Fan Speed:</label>
+       <span id="fan-speed">--</span>
+    </div>
+
+    <div>
+        <label for="cpu-status">CPU Status:</label>
+        <span id="cpu-status">--</span>
+    </div>
+    <script>
+
+        const temperatureInput = document.getElementById("temperature-input");
+        const modeSelect = document.getElementById("mode");
+        const updateBtn = document.getElementById("update-btn");
+        const fanSpeed = document.getElementById("fan-speed");
+        const cpuStatus = document.getElementById("cpu-status");
+        const infoStatus = document.getElementById("info-status")
+
+        updateBtn.addEventListener("click", function(){
+            
+            const temperatureVL = Number(temperatureInput.value)
+            const modeSelectVL = modeSelect.value;
+
+                infoStatus.textContent ="";
+                fanSpeed.textContent = "--";
+                cpuStatus.textContent = "--";
+
+
+            if (temperatureVL < 0 || temperatureVL > 120 || temperatureInput.value === "" ) {
+
+                infoStatus.textContent = "❗❗❗ PLEASE ENTER A VALUE (0°C TO 120°C)";
+                return;
+            }
+
+            if (temperatureVL < 40 && modeSelectVL === "normal") {
+
+                fanSpeed.textContent = "20% SPEED";
+                cpuStatus.textContent = "✔ SAFE";
+                cpuStatus.classList.add("safe")
+
+            }
+        })
+    </script>
+</body>
+</html>
