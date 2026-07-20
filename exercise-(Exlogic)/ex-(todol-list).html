@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>todo-list</title>                                      
+    </head>
+    <body>
+        <h2>To do list</h2>
+        <input id="todo-input" placeholder = "todo name"/>
+        <button id="add-btn" onclick="add()">Add</button>
+        <div class="show-output"></div>
+        <script>
+
+    const todoList = [];
+    const showOutput = document.querySelector(".show-output");
+    const todoInput = document.getElementById("todo-input");
+
+    function add() {
+        const todo = todoInput.value.trim();
+        if (todo === "") return;
+
+        todoList.push(todo);
+        todoInput.value = "";
+        render();
+    }
+
+    function render() {
+        showOutput.innerHTML = todoList
+            .map((item, index) => `
+                <div>
+                    ${item}
+                    <button onclick="remove(${index})">X</button>
+                </div>
+            `)
+            .join("");
+    }
+
+    function remove(index) {
+        todoList.splice(index, 1);
+        render();
+    }
+</script>
+    </body>
+    </html>
