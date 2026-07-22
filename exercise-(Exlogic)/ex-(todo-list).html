@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>  
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            background: #ecf0f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 80px 20px;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            transform: translateX(-10px);
+        }
+
+        /* 1.INPUT CONTAINER */
+        .container {
+            width: 100%;
+            height: 56px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 5px 6px 5px 20px;
+            border-radius: 999px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .container input {
+            flex: 1;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            background: transparent;
+            color: #334155;
+        }
+
+        .container input::placeholder {
+            color: #94a3b8;
+        }
+
+        .container button {
+            width: 90px;
+            height: 46px;
+            border: none;
+            border-radius: 999px;
+            background: #ff6b47;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .container button:hover {
+            background: #ff5733;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 71, 0.3);
+        }
+
+        .container button:active {
+            transform: translateY(0);
+        }
+
+        /* 2.SHOW OUTPUT*/
+        .show-output {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 14px 18px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+            animation: slideUp 0.25s ease-out;
+        }
+
+        .todo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .todo-item span {
+            color: #334155;
+            font-size: 15px;
+            font-weight: 500;
+            word-break: break-word;
+            padding-right: 10px;
+        }
+
+        /*Button delete*/
+        .todo-item button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background-color: #f1f5f9;
+            color: #64748b;
+            border-radius: 50%;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .todo-item button:hover {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
+        /*animations*/
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>                                    
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <h2>To-Do List</h2>
+
+        <div class="container">
+            <input id="todo-input" placeholder="What needs to be done?" />
+            <button type="button" id="add-btn" onclick="add()">Add</button>
+        </div>
+
+        <div class="show-output"></div>
+    </div>
+
+    <script>
+        const todoList = [];
+        const showOutput = document.querySelector(".show-output");
+        const todoInput = document.getElementById("todo-input");
+
+        function add() {
+            const todo = todoInput.value.trim();
+            if (todo === "") return;
+
+            todoList.push(todo);
+            todoInput.value = "";
+            render();
+        }
+
+        function render() {
+            showOutput.innerHTML = todoList
+                .map((item, index) => `
+                    <div class="todo-item">
+                        <span>${item}</span>
+                        <button onclick="remove(${index})">✕</button>
+                    </div>
+                `)
+                .join("");
+        }
+
+        function remove(index) {
+            todoList.splice(index, 1);
+            render();
+        }
+
+        /*Enter button*/
+        todoInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                add();
+            }
+        });
+    </script>
+</body>
+</html>
