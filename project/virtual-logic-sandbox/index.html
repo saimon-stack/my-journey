@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Logic Sandbox</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="top-nav">
+        <div>
+            <h1 class="logo">LOGIC SANDBOX<span class="version">v1.0</span></h1>
+        </div>
+        <div class="master-controls">
+            <button id="run-btn">▶ RUN SIMULATOR</button>
+            <button id="clear-btn">🗑️ CLEAR BOARD</button>
+        </div>
+    </header>
+
+    <main class="sandbox-container">
+        <aside class="palette-sidebar">
+            <h3>ADD COMPONENT</h3>
+            <div class="toolbox-buttons">
+                <button class="btn-tool" onclick="addComponent('SWITCH')">➕ Power Switch</button>
+                <button class="btn-tool" onclick="addComponent('AND')">➕ AND Gate</button>
+                <button class="btn-tool" onclick="addComponent('OR')">➕ OR Gate</button>
+                <button class="btn-tool" onclick="addComponent('NOT')">➕ NOT Gate</button>
+                <button class="btn-tool" onclick="addComponent('LED')">💡 LED Output</button>
+            </div>
+        </aside>
+        
+        <section class="workspace">
+            <div id="board" class="board-grid"></div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
