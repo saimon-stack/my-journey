@@ -133,3 +133,111 @@ h3{
     box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15);
 }
 
+/* Component Box */
+.component {
+    width: 220px;
+    min-height: 130px;
+    background: #2c3e50;
+    border: 2px solid #4a90e2;
+    border-radius: 12px;
+    padding: 15px;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.component:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+/* Title */
+.component h4 {
+    margin: 0 0 15px;
+    color: #4fc3f7;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #e74c3c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.toggle-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/*ON */
+.toggle-btn.on {
+    background: #2ecc71;
+}
+
+/* Gate Status */
+.gate-status {
+    background: rgba(255,255,255,0.08);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Output */
+.out-val {
+    font-weight: bold;
+    color: #ff5252;
+}
+
+/* Output ON */
+.out-val.on {
+    color: #00e676;
+}
+
+/* LED */
+.led-light {
+    width: 40px;
+    height: 40px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background: #555;
+    border: 3px solid #777;
+    transition: all .3s ease;
+}
+
+/* LED ON */
+.led-light.on {
+    background: #00ff55;
+    border-color: #66ff99;
+    box-shadow:
+        0 0 10px #00ff55,
+        0 0 20px #00ff55,
+        0 0 35px #00ff55;
+}
+
+/* LED OFF */
+.led-light.off {
+    background: #444;
+    box-shadow: none;
+}
+
+/* Input ON/OFF */
+.input-on {
+    color: #00e676;
+    font-weight: bold;
+}
+
+.input-off {
+    color: #ff5252;
+    font-weight: bold;
+}
