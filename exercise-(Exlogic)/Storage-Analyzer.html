@@ -1,0 +1,32 @@
+    <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Storage Analyzer</title>                                   
+        </head>
+        <body>
+            <script>
+                
+            const fileSystem = [
+                { id: "F01", name: "system32_backup.dll", size: 500, type: "system" },
+                { id: "F02", name: "minecraft_mods_pack.zip", size: 2048, type: "archive" },
+                { id: "F03", name: "math_integration_2026.pdf", size: 15, type: "document" },
+                { id: "F04", name: "bluetooth_transfer_log.txt", size: 5, type: "text" },
+                { id: "F05", name: "old_display_driver.bin", size: 1200, type: "system" },
+                { id: "F06", name: "flexio_calc_manual.pdf", size: 8, type: "document" }
+            ];
+
+                const largeFiles = fileSystem.filter(a => a.size >= 1000)
+                const largeFilesSort = [...largeFiles].sort((a,b) => b.size - a.size)
+                const warning = largeFilesSort.map(({name,size}) => `[WARNING] ${name} is currently using ${size} MB.`)
+                const totalSize = fileSystem.reduce((a, b) => a + b.size, 0);
+
+                console.log(largeFiles)
+                console.log(largeFilesSort)
+                console.log(warning)
+                console.log(totalSize)
+
+            </script>
+        </body>
+        </html>
