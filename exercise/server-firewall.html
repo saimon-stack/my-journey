@@ -1,0 +1,31 @@
+    <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Server Firewall</title>                                   
+        </head>
+        <body>
+            <script>
+                
+           const networkRequests = [
+            { reqId: "REQ-001", ip: "192.168.1.10", type: "GET", size: 45, status: "pending" },
+            { reqId: "REQ-002", ip: "10.0.0.5", type: "POST", size: 1200, status: "pending" },
+            { reqId: "REQ-003", ip: "192.168.1.50", type: "GET", size: 12, status: "pending" },
+            { reqId: "REQ-004", ip: "45.22.19.11", type: "DDOS_ATTACK", size: 9999, status: "pending" },
+            { reqId: "REQ-005", ip: "10.0.0.8", type: "GET", size: 300, status: "pending" }
+            ];
+
+            const attackerRequest = networkRequests.find(protect => protect.type === "DDOS_ATTACK");
+            const attackerIp = attackerRequest.ip;
+            const cleanTraffic = networkRequests.filter(clean => clean.type !== "DDOS_ATTACK" );
+            const processedTraffic = cleanTraffic.map(proces => {return {...proces, status:"processed"}});
+
+            console.log(attackerRequest)
+            console.log(`[ALERT] Attack detected from IP: ${attackerIp}`)
+            console.log(cleanTraffic)
+            console.log(processedTraffic)
+
+            </script>
+        </body>
+        </html>
