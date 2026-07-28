@@ -4,7 +4,7 @@ let nextId = 1;
 function addComponent(type) {
     const board = document.getElementById('board');
     const currentId = nextId; 
-    const domId = `comp-${currentId}`; 
+    const domId = `comp-${currentId}`;
 
     const newComponent = {
         id: currentId,
@@ -62,6 +62,24 @@ function addComponent(type) {
     board.appendChild(card);
 }
 
+        function toggleSwitch(id){
+            const idBtn = document.getElementById(`btn-${id}`);
+            const choiceComponents=components.find(c => c.id === id)
+            if (!choiceComponents) return;
+            if (choiceComponents.outputValue === 0) {
+            choiceComponents.outputValue = 1;
+            } else {
+            choiceComponents.outputValue = 0;
+            }
+
+            if (choiceComponents.outputValue === 1) {
+            idBtn.innerText = "ON";
+            idBtn.classList.add("on");
+            } else {
+            idBtn.innerText = "OFF";
+            idBtn.classList.remove("on");
+            }
+        }
 function clearBoard() {
     components = [];
     nextId = 1;
