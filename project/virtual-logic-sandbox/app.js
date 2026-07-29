@@ -28,30 +28,35 @@ function addComponent(type) {
     switch (type) {
         case 'SWITCH':
             contentHTML = `
+                <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>POWER SWITCH</h4>
                 <button id="btn-${currentId}" class="toggle-btn" onclick="toggleSwitch(${currentId})">OFF</button>
             `;
             break;
         case 'AND':
             contentHTML = `
+                <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>AND GATE</h4>
                 <div class="gate-status">Input: OFF, OFF ➔ Output: <span class="out-val">OFF</span></div>
             `;
             break;
         case 'OR':
             contentHTML = `
+                <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>OR GATE</h4>
                 <div class="gate-status">Input: OFF, OFF ➔ Output: <span class="out-val">OFF</span></div>
             `;
             break;
         case 'NOT':
             contentHTML = `
+                <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>NOT GATE</h4>
                 <div class="gate-status">Input: OFF ➔ Output: <span class="out-val">ON</span></div>
             `;
             break;
         case 'LED':
             contentHTML = `
+                <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>LED OUTPUT</h4>
                 <div id="led-${currentId}" class="led-light"></div>
             `;
@@ -84,4 +89,9 @@ function clearBoard() {
     components = [];
     nextId = 1;
     document.getElementById('board').innerHTML = '';
+}
+
+function deleteComponent(id) {
+    components = components.filter(com => com.id !== id);
+    document.getElementById(`comp-${id}`).remove();
 }

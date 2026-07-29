@@ -135,6 +135,7 @@ h3{
 
 /* Component Box */
 .component {
+    position: relative;
     width: 220px;
     min-height: 130px;
     background: #2c3e50;
@@ -161,6 +162,24 @@ h3{
     letter-spacing: 1px;
 }
 
+.delete-btn{
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;  
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    color: #ff6b6b;
+    transform: scale(1.25);
+}
+
 /* Toggle Button */
 .toggle-btn {
     padding: 10px 25px;
@@ -181,13 +200,11 @@ h3{
 
 /*ON */
 .toggle-btn.on {
-    background: #2ecc71;
-    box-shadow: 0px 0px 20px 15px rgb(21, 118, 61);
+    background: #56dc8e;
+    box-shadow: 0px 0px 65px 15px rgb(21, 118, 61);
+    border:1px solid #52ff9a;
 }
 
-.toggle-btn:hover{
-    box-shadow: 10 10 10 0#37f285;
-}
 /* Gate Status */
 .gate-status {
     background: rgba(255,255,255,0.08);
@@ -249,8 +266,8 @@ h3{
 
 #board {
     display: flex;
-    flex-wrap: wrap;   /* Hết chỗ thì tự xuống dòng */
-    gap: 20px;         /* Khoảng cách giữa các card */
+    flex-wrap: wrap;
+    gap: 20px;         
     align-content: flex-start;
     padding: 20px;
 }
