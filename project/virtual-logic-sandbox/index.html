@@ -1,32 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Logic Sandbox</title>
+    <title>Logic Sandbox - Studio Edition</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Font Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="top-nav">
-        <div>
-            <h1 class="logo">LOGIC SANDBOX<span class="version">v1.0</span></h1>
+        <div class="brand">
+            <div class="brand-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <h1 class="logo">Logic Studio</h1>
+            <span class="badge">v1.0</span>
         </div>
         <div class="master-controls">
-            <button id="run-btn">▶ RUN SIMULATOR</button>
-            <button id="clear-btn" onclick="clearBoard()">🗑️ CLEAR BOARD</button>
+            <button id="run-btn" class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                RUN SIMULATOR
+            </button>
+            <button id="clear-btn" class="btn-outline" onclick="clearBoard()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                CLEAR BOARD
+            </button>
         </div>
     </header>
 
     <main class="sandbox-container">
         <aside class="palette-sidebar">
-            <h3>ADD COMPONENT</h3>
+            <div class="sidebar-title">LINH KIỆN</div>
+            
             <div class="toolbox-buttons">
-                <button class="btn-tool" onclick="addComponent('SWITCH')">➕ Power Switch</button>
-                <button class="btn-tool" onclick="addComponent('AND')">➕ AND Gate</button>
-                <button class="btn-tool" onclick="addComponent('OR')">➕ OR Gate</button>
-                <button class="btn-tool" onclick="addComponent('NOT')">➕ NOT Gate</button>
-                <button class="btn-tool" onclick="addComponent('LED')">💡 LED Output</button>
+                <button class="btn-tool" onclick="addComponent('SWITCH')">
+                    <span class="tool-badge switch-badge">➕</span>
+                    <span class="tool-label">Power Switch</span>
+                </button>
+                <button class="btn-tool" onclick="addComponent('AND')">
+                    <span class="tool-badge gate-badge">➕</span>
+                    <span class="tool-label">AND Gate</span>
+                </button>
+                <button class="btn-tool" onclick="addComponent('OR')">
+                    <span class="tool-badge gate-badge">➕</span>
+                    <span class="tool-label">OR Gate</span>
+                </button>
+                <button class="btn-tool" onclick="addComponent('NOT')">
+                    <span class="tool-badge gate-badge">➕</span>
+                    <span class="tool-label">NOT Gate</span>
+                </button>
+                <button class="btn-tool" onclick="addComponent('LED')">
+                    <span class="tool-badge led-badge">💡</span>
+                    <span class="tool-label">LED Output</span>
+                </button>
             </div>
         </aside>
         
@@ -34,6 +64,7 @@
             <div id="board" class="board-grid"></div>
         </section>
     </main>
+
     <script src="app.js"></script>
 </body>
 </html>
