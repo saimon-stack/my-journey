@@ -1,8 +1,10 @@
 let components = [];
 let nextId = 1;
 
-function addComponent(type) {
+function addComponent(type, x = null, y = null) {
     const board = document.getElementById('board');
+    if (!board) return;
+
     const currentId = nextId; 
     const domId = `comp-${currentId}`;
 
@@ -29,54 +31,59 @@ function addComponent(type) {
         case 'SWITCH':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
-                <h4>Công tắc Nguồn</h4>
+                <h4>Power Switch</h4>
                 <button id="btn-${currentId}" class="toggle-btn" onclick="toggleSwitch(${currentId})">OFF</button>
-                <div class="pin output-pin pin-center" title="Đầu ra"></div>
+                <div class="pin output-pin pin-center" title="output"></div>
             `;
             break;
         case 'AND':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
-                <h4>Cổng AND</h4>
+                <h4>AND Gate</h4>
                 <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span class="out-val">OFF</span></div>
-                <div class="pin input-pin pin-top" title="Đầu vào 1"></div>
-                <div class="pin input-pin pin-bottom" title="Đầu vào 2"></div>
-                <div class="pin output-pin pin-center" title="Đầu ra"></div>
+                <div class="pin input-pin pin-top" title="input 1"></div>
+                <div class="pin input-pin pin-bottom" title="input 2"></div>
+                <div class="pin output-pin pin-center" title="output"></div>
             `;
             break;
         case 'OR':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
-                <h4>Cổng OR</h4>
+                <h4>OR Gate</h4>
                 <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span class="out-val">OFF</span></div>
-                <div class="pin input-pin pin-top" title="Đầu vào 1"></div>
-                <div class="pin input-pin pin-bottom" title="Đầu vào 2"></div>
-                <div class="pin output-pin pin-center" title="Đầu ra"></div>
+                <div class="pin input-pin pin-top" title="input 1"></div>
+                <div class="pin input-pin pin-bottom" title="input 2"></div>
+                <div class="pin output-pin pin-center" title="output"></div>
             `;
             break;
         case 'NOT':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
-                <h4>Cổng NOT</h4>
+                <h4>NOT Gate</h4>
                 <div class="gate-status">Vào: OFF ➔ Ra: <span class="out-val">ON</span></div>
-                <div class="pin input-pin pin-center" title="Đầu vào"></div>
-                <div class="pin output-pin pin-center" title="Đầu ra"></div>
+                <div class="pin input-pin pin-center" title="input"></div>
+                <div class="pin output-pin pin-center" title="output"></div>
             `;
             break;
         case 'LED':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
-                <h4>Đèn LED</h4>
+                <h4>LED Output</h4>
                 <div id="led-${currentId}" class="led-light"></div>
-                <div class="pin input-pin pin-center" title="Đầu vào"></div>
+                <div class="pin input-pin pin-center" title="input"></div>
             `;
             break;
     }
     
-    
-    const offset = (components.length - 1) * 20;
-    card.style.left = `${30 + offset}px`;
-    card.style.top = `${30 + offset}px`;
+    if (x !== null && y !== null) {
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
+    } else {
+        const offset = (components.length - 1) * 20;
+        card.style.left = `${30 + offset}px`;
+        card.style.top = `${30 + offset}px`;
+    }
+
     card.onmousedown = function(event) {
         startDrag(event, card);
     };
@@ -135,14 +142,97 @@ function startDrag(event, card) {
         card.style.zIndex = 10;
     };
 }
+
 function clearBoard() {
     components = [];
     nextId = 1;
-    document.getElementById('board').innerHTML = '';
+    const board = document.getElementById('board');
+    if (board) {
+        board.innerHTML = '<canvas id="wireCanvas"></canvas>';
+    }
 }
 
 function deleteComponent(id) {
     components = components.filter(com => com.id !== id);
     const elem = document.getElementById(`comp-${id}`);
     if (elem) elem.remove();
+}
+
+function initSidebarDrag() {
+    const toolButtons = document.querySelectorAll('.btn-tool');
+    const board = document.getElementById('board');
+    if (!board) return;
+
+    toolButtons.forEach(btn => {
+        btn.addEventListener('pointerdown', (e) => {
+            if (e.button && e.button !== 0) return;
+
+            const type = btn.getAttribute('data-type');
+            let isDragging = false;
+            let ghostEl = null;
+
+            const startX = e.clientX;
+            const startY = e.clientY;
+
+            function onPointerMove(moveEvent) {
+                const dist = Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY);
+                
+                if (!isDragging && dist > 5) {
+                    isDragging = true;
+                    ghostEl = document.createElement('div');
+                    ghostEl.className = 'drag-ghost';
+                    ghostEl.innerText = `${type} GATE`;
+                    document.body.appendChild(ghostEl);
+                }
+
+                if (isDragging && ghostEl) {
+                    ghostEl.style.left = `${moveEvent.clientX}px`;
+                    ghostEl.style.top = `${moveEvent.clientY}px`;
+                }
+            }
+
+            function onPointerUp(upEvent) {
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', onPointerUp);
+
+                if (ghostEl) {
+                    ghostEl.remove();
+                }
+
+                if (isDragging) {
+                    const boardRect = board.getBoundingClientRect();
+                    const dropX = upEvent.clientX;
+                    const dropY = upEvent.clientY;
+
+                    if (
+                        dropX >= boardRect.left &&
+                        dropX <= boardRect.right &&
+                        dropY >= boardRect.top &&
+                        dropY <= boardRect.bottom
+                    ) {
+
+                        let posX = dropX - boardRect.left - 105;
+                        let posY = dropY - boardRect.top - 70;
+
+                        if (posX < 0) posX = 0;
+                        if (posY < 0) posY = 0;
+
+                        addComponent(type, posX, posY);
+                    }
+                } else {
+                    // Nếu người dùng chỉ click nhanh tại chỗ mà không kéo -> Thêm linh kiện mặc định
+                    addComponent(type);
+                }
+            }
+
+            document.addEventListener('pointermove', onPointerMove);
+            document.addEventListener('pointerup', onPointerUp);
+        });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSidebarDrag);
+} else {
+    initSidebarDrag();
 }
