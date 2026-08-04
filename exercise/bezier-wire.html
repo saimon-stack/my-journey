@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Bezier Wire Simulator</title>
+<style>
+    body{
+        margin:0;
+        background:#111;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        font-family:Arial,sans-serif;
+    }
+    canvas{
+        background:#1a1a1a;
+        border:2px solid #333;
+        box-shadow:0 0 20px #000;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="500"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const A = { x:120, y:250, r:12 };
+const B = { x:680, y:250, r:12 };
+
+let dragging = false;
+let connected = false;
+
+let mouse = {
+    x:A.x,
+    y:A.y
+};
+
+const SNAP = 25;
+
+function dist(x1,y1,x2,y2){
+    return Math.hypot(x2-x1,y2-y1);
+}
+
+// Mouse
+
+canvas.addEventListener("mousedown",e=>{
+
+    const rect = canvas.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if(dist(x,y,A.x,A.y)<30){
+
+        dragging = true;
+        connected = false;
+
+        mouse.x=x;
+        mouse.y=y;
+    }
+
+});
+
+window.addEventListener("mousemove",e=>{
+
+    if(!dragging) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+
+});
+
+window.addEventListener("mouseup",()=>{
+
+    if(!dragging) return;
+
+    dragging = false;
+
+    if(dist(mouse.x,mouse.y,B.x,B.y)<=SNAP){
+
+        connected=true;
+
+    }else{
+
+        connected=false;
+
+    }
+
+});
+
+// Draw Pin
+
+function drawPin(pin,label,color){
+
+    ctx.beginPath();
+    ctx.arc(pin.x,pin.y,pin.r,0,Math.PI*2);
+    ctx.fillStyle=color;
+    ctx.fill();
+
+    ctx.lineWidth=3;
+    ctx.strokeStyle="white";
+    ctx.stroke();
+
+    ctx.fillStyle="white";
+    ctx.font="18px Arial";
+    ctx.fillText(label,pin.x-6,pin.y-22);
+
+}
+
+// Draw Wire
+
+function drawWire(){
+
+    const start=A;
+
+    let end={
+        x:mouse.x,
+        y:mouse.y
+    };
+
+    // Snap khi đến gần B
+    if(dragging){
+
+        if(dist(mouse.x,mouse.y,B.x,B.y)<SNAP){
+
+            end=B;
+
+        }
+
+    }
+
+    if(connected){
+
+        end=B;
+
+    }
+
+    const d=Math.hypot(end.x-start.x,end.y-start.y);
+
+    const bend=Math.max(60,d*0.25);
+
+    const cp1={
+        x:start.x+d*0.3,
+        y:start.y-bend
+    };
+
+    const cp2={
+        x:end.x-d*0.3,
+        y:end.y+bend
+    };
+
+    ctx.save();
+
+    ctx.lineCap="round";
+
+    ctx.shadowColor="#00ffff";
+    ctx.shadowBlur=20;
+
+    ctx.lineWidth=8;
+    ctx.strokeStyle="#00ffff";
+
+    ctx.beginPath();
+    ctx.moveTo(start.x,start.y);
+
+    ctx.bezierCurveTo(
+
+        cp1.x,cp1.y,
+
+        cp2.x,cp2.y,
+
+        end.x,end.y
+
+    );
+
+    ctx.stroke();
+
+    ctx.shadowBlur=0;
+
+    ctx.lineWidth=2;
+
+    ctx.strokeStyle="#ffffff";
+
+    ctx.beginPath();
+
+    ctx.moveTo(start.x,start.y);
+
+    ctx.bezierCurveTo(
+
+        cp1.x,cp1.y,
+
+        cp2.x,cp2.y,
+
+        end.x,end.y
+
+    );
+
+    ctx.stroke();
+
+    ctx.restore();
+
+}
+
+// Render
+
+function render(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    if(dragging || connected){
+
+        drawWire();
+
+    }
+
+    drawPin(A,"A","#00ff55");
+    drawPin(B,"B","#ff4444");
+
+    ctx.fillStyle="#ddd";
+    ctx.font="15px Arial";
+    ctx.fillText("Kéo dây từ Pin A sang Pin B",20,30);
+
+    requestAnimationFrame(render);
+
+}
+
+render();
+
+
+</script>
+
+</body>
+</html>
