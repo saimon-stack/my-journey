@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circuit Board</title>
+</head>
+<body>
+    <script>
+        const circuitBoard = [
+            { id: 1, type: "SWITCH", state: "ON" },
+            { id: 2, type: "LED", state: "OFF" }
+        ];
+
+        const jsonString = JSON.stringify(circuitBoard);
+
+        localStorage.setItem("circuitBoard", jsonString);
+
+        console.log("Circuit board saved to localStorage!");
+
+        const loadedString = localStorage.getItem("circuitBoard");
+
+        if (loadedString) {
+            const restoredBoard = JSON.parse(loadedString);
+
+            console.log("Circuit board restored:", restoredBoard);
+            console.log("The first component is:", restoredBoard[0].type);
+        } else {
+            console.log("Storage is empty. No data has been saved yet.");
+        }
+    </script>
+</body>
+</html>
