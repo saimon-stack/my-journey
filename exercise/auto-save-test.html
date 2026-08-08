@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Save System - Debounce & Storage</title>
+</head>
+<body>
+
+<script>
+        function debounce(callback, delay) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    callback.apply(this, args);
+                }, delay);
+            };
+        }
+
+        const circuitState = {
+        version: "1.0",
+        components: [
+            { id: 1, type: "SWITCH", pos: { x: 50, y: 100 }, isOn: true },
+            { id: 2, type: "LED", pos: { x: 300, y: 100 }, isOn: false }
+        ]
+        }
+        function saveToStorage() {
+            const stateSnapshot = structuredClone(circuitState);
+
+            const jsonString = JSON.stringify(stateSnapshot);
+            localStorage.setItem("auto_saved_circuit", jsonString);
+
+            console.log("[STORAGE] Circuit successfully auto-saved at:", new Date().toLocaleTimeString());
+        }
+    
+        const triggerAutoSave = debounce(saveToStorage, 500);
+
+        console.log("🚀 User started moving components...");
+
+        circuitState.components[1].isOn = true;
+        triggerAutoSave();
+
+        circuitState.components[0].pos.x = 80;
+        triggerAutoSave();
+
+        circuitState.components[0].pos.x = 120;
+        triggerAutoSave();
+
+        circuitState.components[0].pos.x = 150;
+        triggerAutoSave();
+
+        function loadSavedCircuit() {
+    const rawData = localStorage.getItem("auto_saved_circuit");
+    if (rawData) {
+        const restoredState = JSON.parse(rawData);
+        console.log("🔄 [LOAD] Restore saved data from disk:", restoredState);
+    } else {
+        console.log("⚠️ No saved data found!");
+    }
+    }
+
+    setTimeout(() => {
+        loadSavedCircuit();
+    }, 1000);
+</script>
+
+</body>
+</html>
