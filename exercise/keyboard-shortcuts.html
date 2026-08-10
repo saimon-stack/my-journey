@@ -1,0 +1,25 @@
+	<!DOCTYPE html>
+	    <html lang="en">
+	    <head>
+            <meta charset="UTF-8" />
+	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	        <title>keyboard shortcuts</title>
+        <link rel="stylesheet" href="style.css" />                                         
+	    </head>
+	    <body>
+	        <script>
+                window.addEventListener("keydown", (e) => {
+              
+                if (e.key === "Delete" || e.key === "Backspace") {
+                    alert("[SHORTCUT] Selected component deleted!");
+                }
+
+   
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+                    e.preventDefault();
+                    alert("[SHORTCUT] Selected component undone!");
+                }
+            });
+            </script>
+	    </body>
+	    </html>
