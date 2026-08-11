@@ -1,0 +1,55 @@
+	<!DOCTYPE html>
+	    <html lang="en">
+	    <head>
+            <meta charset="UTF-8" />
+	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	        <title>JS Proxy - Data Validation</title>                                        
+	    </head>
+	    <body>
+	        <script>
+                const rawUser = {
+                name: "Nguyen Van A",
+                age: 20,
+                email: "vana@gmail.com"
+            };
+
+            const validatorHandler = {
+            set(target, prop, value) {
+
+                if (prop === "age") {
+                    if (typeof value !== "number" || value < 0 || value > 120) {
+                        console.error(`[ERROR] Age ${value}  invalid! (must be a number between 0 to 120)`);
+                        return false;
+                    }
+                }
+
+                if (prop === "email") {
+                    if (typeof value !== "string" || !value.includes("@")) {
+                        console.error(`[ERROR] Email "${value}" is invalid! (must be a string containing "@")`);
+                        return false;
+                    }
+                }
+
+                console.log(`[SUCCESS] Update ${prop} = "${value}" successfully!`);
+                target[prop] = value;
+                return true;
+            }
+            };
+
+            const user = new Proxy(rawUser, validatorHandler);
+
+            console.log("TRY TO ASSIGN VALID DATA TO USER OBJECT");
+
+            user.age = 25;              
+            user.email = "a@yahoo.com"; 
+
+            console.log("\n TRY TO ASSIGN INVALID DATA TO USER OBJECT");
+
+            user.age = -5;            
+            user.age = 150;
+            user.email = "invalid-email"; 
+
+            console.log("\n FINAL USER OBJECT:", user);
+            </script>
+	    </body>
+	    </html>
