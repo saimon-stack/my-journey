@@ -1,0 +1,27 @@
+	<!DOCTYPE html>
+	    <html lang="en">
+	    <head>
+            <meta charset="UTF-8" />
+	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	        <title>Multi-tab sync</title>
+	    </head>
+	    <body>
+	        <script>
+              		const channel = new BroadcastChannel("my_channel");
+					channel.onmessage = (event) => (
+						console.log("[received]", event.data)
+					)
+
+					function sendSyncMessage(text) {
+					const messageObj = {
+						senderId: "Tab_" + Math.floor(Math.random() * 1000),
+						text: text,
+						timestamp: new Date().toLocaleTimeString()
+					};
+
+					channel.postMessage(messageObj);
+					console.log("[sent]:", messageObj);
+}
+            </script>
+	    </body>
+	    </html>
