@@ -1,66 +1,159 @@
 <!DOCTYPE html>
-	    <html lang="en">
-	    <head>
-            <meta charset="UTF-8" />
-	        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	        <title>calculator</title>
-            <style>
-                body{
-                    display: flex;
-                    flex-direction:column;
-                    align-items: center;
-                    height: 100vh;
-                    font-family: Arial, sans-serif;
-                    background-color: #181A1B;
-                    color: #E8E6E3;
-                }
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-                .board{
-                    display: grid; 
-                    grid-template-columns: repeat(4, 60px); 
-                    grid-template-rows: repeat(5, 60px);
-                    gap: 10px; 
-                    height: 360px; 
-                    width: 260px; 
-                    
-                }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #353434;
+            margin: 0;
+        }
 
-                .board button{
-                    font-size: 20px;
-                    font-weight: bold;
-                    color: #E8E6E3;
-                    border: none;
-                    border-radius:250px;
-                    cursor: pointer;
-                    background-color: #262A2B;
-                }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+            font-weight: bold;
+        }
 
-                .board button:nth-child(4n){
-                    background-color: #C67A01
+        #calculator {
+            width: 310px;
+            background-color: hsl(0, 0%, 15%);
+            padding: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #display {
+            display: block;
+            background-color: hsl(0, 0%, 31%);
+            height: 80px;
+            padding: 15px;
+            text-align: left;
+            font-size:28px;
+            border: none;
+            width: 100%;
+            color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            outline: none;
+
+        }
+
+        #board {
+            display: grid; 
+            grid-template-columns: repeat(4, 60px); 
+            gap: 10px; 
+        }
+
+        #board button:nth-child(4n) {
+            background-color: #C67A01;
+       }
+
+        #board button:nth-child(4n):hover {
+            background-color: hsl(36, 94%, 48%);
+        }
+
+        #board button:nth-child(4n):active {
+            background-color: hsl(36, 94%, 58%);
+        }
+
+        #board button {
+            width: 58px;
+            height: 58px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: #424242;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            transition: background-color 0.15s ease;
+        }
+
+        #board button:hover {
+            background-color: hsl(0, 0%, 50%);
+        }
+
+        #board button:active {
+            background-color: hsl(0, 0%, 60%);
+        }
+
+        #board button:last-child {
+        grid-column: span 4;
+        width: 100%;
+        border-radius: 30px;
+        background-color: #a53030;
+        }
+    </style>
+</head>
+<body>  
+    <h1>Calculator</h1>
+    <div id="calculator">
+        <input id="display" type="text" readonly />
+        <div id="board">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>+</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>-</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>*</button>
+            <button>0</button>
+            <button>.</button>
+            <button>=</button>
+            <button>/</button>
+            <button>C</button>
+        </div>
+    </div>
+    <script>
+        const display = document.getElementById('display');
+        const board = document.getElementById('board');
+
+        board.addEventListener('click', (e) => {
+            if (!e.target.matches('button')) return;
+
+            const btnText = e.target.innerText;
+
+            if (btnText === 'C') {
+                display.value = '';
+            } else if (btnText === '=') {
+                try {
+                    if (display.value.trim() !== '') {
+                        display.value = Function(`"use strict"; return (${display.value})`)();
+                    }
+                } catch (error) {
+                    display.value = 'Error';
+                    setTimeout(() => { display.value = ''; }, 1200);
                 }
-            </style>
-	    </head>
-	    <body>	
-            <h1>Calculator</h1>
-            <div class="board">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>+</button>
-                <button>4</button>
-                <button>5</button>
-                <button>6</button>
-                <button>-</button>
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-                <button>*</button>
-                <button>0</button>
-                <button>,</button>
-                <button>=</button>
-                <button>/</button>
-                <button>clear</button>
-            </div>
-	        <script></script>
-	    </body>
-	    </html>
+            } else {
+                if (display.value === 'Error') {
+                    display.value = '';
+                }
+                display.value += btnText;
+            }
+        });
+    </script>
+</body>
+</html>
