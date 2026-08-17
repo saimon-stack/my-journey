@@ -1,31 +1,183 @@
 let components = [];
+let wires = [];
 let nextId = 1;
+
+let connectingState = {
+    active: false,
+    fromCompId: null,
+    fromPinType: null,
+    fromPinIndex: null,
+    mouseX: 0,
+    mouseY: 0
+};
+
+function initCanvas() {
+    const canvas = document.getElementById('wireCanvas');
+    const board = document.getElementById('board');
+    if (!canvas || !board) return;
+
+    canvas.width = board.clientWidth;
+    canvas.height = board.clientHeight;
+}
+
+window.addEventListener('resize', () => {
+    initCanvas();
+    drawWires();
+});
+
+function getPinCenter(compId, pinType, pinIndex) {
+    const pinEl = document.querySelector(`.pin[data-comp-id="${compId}"][data-pin-type="${pinType}"][data-pin-index="${pinIndex}"]`);
+    if (!pinEl) return null;
+
+    const boardRect = document.getElementById('board').getBoundingClientRect();
+    const pinRect = pinEl.getBoundingClientRect();
+
+    return {
+        x: pinRect.left + pinRect.width / 2 - boardRect.left,
+        y: pinRect.top + pinRect.height / 2 - boardRect.top
+    };
+}
+function drawWires() {
+    const canvas = document.getElementById('wireCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    wires.forEach(wire => {
+        const start = getPinCenter(wire.fromCompId, 'output', wire.fromPinIndex);
+        const end = getPinCenter(wire.toCompId, 'input', wire.toPinIndex);
+
+        if (start && end) {
+            const sourceComp = components.find(c => c.id === wire.fromCompId);
+            const isActive = sourceComp && sourceComp.outputValue === 1;
+            drawBezierCurve(ctx, start.x, start.y, end.x, end.y, isActive);
+        }
+    });
+
+    if (connectingState.active) {
+        const start = getPinCenter(connectingState.fromCompId, connectingState.fromPinType, connectingState.fromPinIndex);
+        if (start) {
+            drawBezierCurve(ctx, start.x, start.y, connectingState.mouseX, connectingState.mouseY, false, true);
+        }
+    }
+}
+
+function drawBezierCurve(ctx, x1, y1, x2, y2, isActive = false, isDraft = false) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+
+    const dx = Math.abs(x2 - x1) * 0.5;
+    ctx.bezierCurveTo(x1 + dx, y1, x2 - dx, y2, x2, y2);
+
+    ctx.lineWidth = 3;
+    if (isDraft) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.setLineDash([6, 6]);
+    } else {
+        ctx.strokeStyle = isActive ? '#22c55e' : '#64748b';
+        ctx.setLineDash([]);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function handlePinClick(event, compId, pinType, pinIndex) {
+    event.stopPropagation();
+
+    if (!connectingState.active) {
+        connectingState = {
+            active: true,
+            fromCompId: compId,
+            fromPinType: pinType,
+            fromPinIndex: pinIndex,
+            mouseX: event.clientX,
+            mouseY: event.clientY
+        };
+        return;
+    }
+
+    if (connectingState.active) {
+        if (connectingState.fromCompId === compId || connectingState.fromPinType === pinType) {
+            resetConnectingState();
+            return;
+        }
+
+        let fromCompId, fromPinIndex, toCompId, toPinIndex;
+
+        if (connectingState.fromPinType === 'output' && pinType === 'input') {
+            fromCompId = connectingState.fromCompId;
+            fromPinIndex = connectingState.fromPinIndex;
+            toCompId = compId;
+            toPinIndex = pinIndex;
+        } else if (connectingState.fromPinType === 'input' && pinType === 'output') {
+            fromCompId = compId;
+            fromPinIndex = pinIndex;
+            toCompId = connectingState.fromCompId;
+            toPinIndex = connectingState.fromPinIndex;
+        } else {
+            resetConnectingState();
+            return;
+        }
+
+        wires = wires.filter(w => !(w.toCompId === toCompId && w.toPinIndex === toPinIndex));
+
+        // Thêm dây mới vào danh sách
+        wires.push({ fromCompId, fromPinIndex, toCompId, toPinIndex });
+
+        resetConnectingState();
+        updateSimulation();
+    }
+}
+
+function resetConnectingState() {
+    connectingState.active = false;
+    connectingState.fromCompId = null;
+    drawWires();
+}
+
+document.addEventListener('mousemove', (e) => {
+    if (connectingState.active) {
+        const board = document.getElementById('board');
+        const boardRect = board.getBoundingClientRect();
+        connectingState.mouseX = e.clientX - boardRect.left;
+        connectingState.mouseY = e.clientY - boardRect.top;
+        drawWires();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') resetConnectingState();
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('pin') && connectingState.active) {
+        resetConnectingState();
+    }
+});
 
 function addComponent(type, x = null, y = null) {
     const board = document.getElementById('board');
     if (!board) return;
 
-    const currentId = nextId; 
+    const currentId = nextId;
     const domId = `comp-${currentId}`;
 
     const newComponent = {
         id: currentId,
         type: type,
-        sourceId1: null,
-        sourceId2: null,
         inputValue1: 0,
         inputValue2: 0,
         outputValue: 0
     };
 
     components.push(newComponent);
-    nextId++; 
+    nextId++;
 
     const card = document.createElement('div');
     card.className = `component ${type.toLowerCase()}-card`;
     card.id = domId;
 
-    let contentHTML = ''; 
+    let contentHTML = '';
 
     switch (type) {
         case 'SWITCH':
@@ -33,36 +185,36 @@ function addComponent(type, x = null, y = null) {
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>Power Switch</h4>
                 <button id="btn-${currentId}" class="toggle-btn" onclick="toggleSwitch(${currentId})">OFF</button>
-                <div class="pin output-pin pin-center" title="output"></div>
+                <div class="pin output-pin pin-center" data-comp-id="${currentId}" data-pin-type="output" data-pin-index="1" title="output"></div>
             `;
             break;
         case 'AND':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>AND Gate</h4>
-                <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span class="out-val">OFF</span></div>
-                <div class="pin input-pin pin-top" title="input 1"></div>
-                <div class="pin input-pin pin-bottom" title="input 2"></div>
-                <div class="pin output-pin pin-center" title="output"></div>
+                <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span id="out-${currentId}" class="out-val">OFF</span></div>
+                <div class="pin input-pin pin-top" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input 1"></div>
+                <div class="pin input-pin pin-bottom" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="2" title="input 2"></div>
+                <div class="pin output-pin pin-center" data-comp-id="${currentId}" data-pin-type="output" data-pin-index="1" title="output"></div>
             `;
             break;
         case 'OR':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>OR Gate</h4>
-                <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span class="out-val">OFF</span></div>
-                <div class="pin input-pin pin-top" title="input 1"></div>
-                <div class="pin input-pin pin-bottom" title="input 2"></div>
-                <div class="pin output-pin pin-center" title="output"></div>
+                <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span id="out-${currentId}" class="out-val">OFF</span></div>
+                <div class="pin input-pin pin-top" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input 1"></div>
+                <div class="pin input-pin pin-bottom" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="2" title="input 2"></div>
+                <div class="pin output-pin pin-center" data-comp-id="${currentId}" data-pin-type="output" data-pin-index="1" title="output"></div>
             `;
             break;
         case 'NOT':
             contentHTML = `
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>NOT Gate</h4>
-                <div class="gate-status">Vào: OFF ➔ Ra: <span class="out-val">ON</span></div>
-                <div class="pin input-pin pin-center" title="input"></div>
-                <div class="pin output-pin pin-center" title="output"></div>
+                <div class="gate-status">Vào: OFF ➔ Ra: <span id="out-${currentId}" class="out-val on">ON</span></div>
+                <div class="pin input-pin pin-center" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input"></div>
+                <div class="pin output-pin pin-center" data-comp-id="${currentId}" data-pin-type="output" data-pin-index="1" title="output"></div>
             `;
             break;
         case 'LED':
@@ -70,11 +222,11 @@ function addComponent(type, x = null, y = null) {
                 <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
                 <h4>LED Output</h4>
                 <div id="led-${currentId}" class="led-light"></div>
-                <div class="pin input-pin pin-center" title="input"></div>
+                <div class="pin input-pin pin-center" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input"></div>
             `;
             break;
     }
-    
+
     if (x !== null && y !== null) {
         card.style.left = `${x}px`;
         card.style.top = `${y}px`;
@@ -87,8 +239,72 @@ function addComponent(type, x = null, y = null) {
     card.onmousedown = function(event) {
         startDrag(event, card);
     };
+
     card.innerHTML = contentHTML;
     board.appendChild(card);
+
+    card.querySelectorAll('.pin').forEach(pin => {
+        pin.addEventListener('click', (e) => {
+            const cId = parseInt(pin.getAttribute('data-comp-id'));
+            const pType = pin.getAttribute('data-pin-type');
+            const pIndex = parseInt(pin.getAttribute('data-pin-index'));
+            handlePinClick(e, cId, pType, pIndex);
+        });
+    });
+
+    initCanvas();
+    updateSimulation();
+}
+
+function updateSimulation() {
+    let changed = true;
+    let maxIterations = 10; 
+
+    while (changed && maxIterations > 0) {
+        changed = false;
+        maxIterations--;
+
+        components.forEach(c => {
+            if (c.type !== 'SWITCH') {
+                c.inputValue1 = 0;
+                c.inputValue2 = 0;
+            }
+        });
+
+        wires.forEach(w => {
+            const src = components.find(c => c.id === w.fromCompId);
+            const dest = components.find(c => c.id === w.toCompId);
+            if (src && dest) {
+                if (w.toPinIndex === 1) dest.inputValue1 = src.outputValue;
+                if (w.toPinIndex === 2) dest.inputValue2 = src.outputValue;
+            }
+        });
+
+        components.forEach(c => {
+            const oldOut = c.outputValue;
+            if (c.type === 'AND') c.outputValue = (c.inputValue1 && c.inputValue2) ? 1 : 0;
+            if (c.type === 'OR') c.outputValue = (c.inputValue1 || c.inputValue2) ? 1 : 0;
+            if (c.type === 'NOT') c.outputValue = c.inputValue1 ? 0 : 1;
+
+            if (oldOut !== c.outputValue) changed = true;
+        });
+    }
+
+    components.forEach(c => {
+        const outSpan = document.getElementById(`out-${c.id}`);
+        if (outSpan) {
+            outSpan.innerText = c.outputValue ? 'ON' : 'OFF';
+            outSpan.className = `out-val ${c.outputValue ? 'on' : ''}`;
+        }
+
+        const ledEl = document.getElementById(`led-${c.id}`);
+        if (ledEl) {
+            if (c.inputValue1) ledEl.classList.add('on');
+            else ledEl.classList.remove('on');
+        }
+    });
+
+    drawWires();
 }
 
 function toggleSwitch(id) {
@@ -105,6 +321,8 @@ function toggleSwitch(id) {
         idBtn.innerText = "OFF";
         idBtn.classList.remove("on");
     }
+
+    updateSimulation();
 }
 
 function startDrag(event, card) {
@@ -128,6 +346,8 @@ function startDrag(event, card) {
 
         card.style.left = newLeft + 'px';
         card.style.top = newTop + 'px';
+
+        drawWires();
     }
 
     function onMouseMove(event) {
@@ -140,22 +360,30 @@ function startDrag(event, card) {
         document.removeEventListener('mousemove', onMouseMove);
         document.onmouseup = null;
         card.style.zIndex = 10;
+        drawWires();
     };
 }
 
 function clearBoard() {
     components = [];
+    wires = [];
     nextId = 1;
     const board = document.getElementById('board');
     if (board) {
         board.innerHTML = '<canvas id="wireCanvas"></canvas>';
     }
+    initCanvas();
 }
 
 function deleteComponent(id) {
     components = components.filter(com => com.id !== id);
+
+    wires = wires.filter(w => w.fromCompId !== id && w.toCompId !== id);
+
     const elem = document.getElementById(`comp-${id}`);
     if (elem) elem.remove();
+
+    updateSimulation();
 }
 
 function initSidebarDrag() {
@@ -176,7 +404,7 @@ function initSidebarDrag() {
 
             function onPointerMove(moveEvent) {
                 const dist = Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY);
-                
+
                 if (!isDragging && dist > 5) {
                     isDragging = true;
                     ghostEl = document.createElement('div');
@@ -195,9 +423,7 @@ function initSidebarDrag() {
                 document.removeEventListener('pointermove', onPointerMove);
                 document.removeEventListener('pointerup', onPointerUp);
 
-                if (ghostEl) {
-                    ghostEl.remove();
-                }
+                if (ghostEl) ghostEl.remove();
 
                 if (isDragging) {
                     const boardRect = board.getBoundingClientRect();
@@ -210,7 +436,6 @@ function initSidebarDrag() {
                         dropY >= boardRect.top &&
                         dropY <= boardRect.bottom
                     ) {
-
                         let posX = dropX - boardRect.left - 105;
                         let posY = dropY - boardRect.top - 70;
 
@@ -220,7 +445,6 @@ function initSidebarDrag() {
                         addComponent(type, posX, posY);
                     }
                 } else {
-                    // Nếu người dùng chỉ click nhanh tại chỗ mà không kéo -> Thêm linh kiện mặc định
                     addComponent(type);
                 }
             }
@@ -231,8 +455,13 @@ function initSidebarDrag() {
     });
 }
 
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSidebarDrag);
+    document.addEventListener('DOMContentLoaded', () => {
+        initSidebarDrag();
+        initCanvas();
+    });
 } else {
     initSidebarDrag();
+    initCanvas();
 }
