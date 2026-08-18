@@ -225,6 +225,16 @@ function addComponent(type, x = null, y = null) {
                 <div class="pin input-pin pin-center" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input"></div>
             `;
             break;
+        case 'XOR':
+            contentHTML = `
+        <button class="delete-btn" onclick="deleteComponent(${currentId})">✕</button>
+        <h4>XOR Gate</h4>
+        <div class="gate-status">Vào: OFF, OFF ➔ Ra: <span id="out-${currentId}" class="out-val">OFF</span></div>
+        <div class="pin input-pin pin-top" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="1" title="input 1"></div>
+        <div class="pin input-pin pin-bottom" data-comp-id="${currentId}" data-pin-type="input" data-pin-index="2" title="input 2"></div>
+        <div class="pin output-pin pin-center" data-comp-id="${currentId}" data-pin-type="output" data-pin-index="1" title="output"></div>
+            `;
+            break;
     }
 
     if (x !== null && y !== null) {
@@ -285,6 +295,7 @@ function updateSimulation() {
             if (c.type === 'AND') c.outputValue = (c.inputValue1 && c.inputValue2) ? 1 : 0;
             if (c.type === 'OR') c.outputValue = (c.inputValue1 || c.inputValue2) ? 1 : 0;
             if (c.type === 'NOT') c.outputValue = c.inputValue1 ? 0 : 1;
+            if (c.type === 'XOR') c.outputValue = (c.inputValue1 !== c.inputValue2) ? 1 : 0;
 
             if (oldOut !== c.outputValue) changed = true;
         });
@@ -302,6 +313,8 @@ function updateSimulation() {
             if (c.inputValue1) ledEl.classList.add('on');
             else ledEl.classList.remove('on');
         }
+
+        
     });
 
     drawWires();
