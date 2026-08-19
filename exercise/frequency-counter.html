@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Array Frequency Counter Demo</title>
+</head>
+<body>
+    <script>
+            function countFrequencies(items) {
+            const frequencies = {};
+
+            for (const item of items) {
+                frequencies[item] = (frequencies[item] || 0) + 1;
+            }
+
+            return frequencies;
+            }
+
+            const fruits = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple'];
+
+            console.log(countFrequencies(fruits));
+    </script>
+</body>
+</html>
