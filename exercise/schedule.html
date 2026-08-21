@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Schedule App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .sidebar {
+        width: 260px;
+        background-color: #f4f2f2;
+        transition: margin-left 0.3s ease;
+      }
+
+      .sidebar.hidden {
+        margin-left: -260px;
+      }
+
+      .header-bar {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .toggle-btn {
+        padding: 2px 4px;
+        font-size: 12px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+      }
+
+      .schedule-logo {
+        font-weight: bold;
+        font-size: 30px;
+        letter-spacing: 1px;
+        color: #000;
+      }
+
+      .main-content{
+        flex: 1;
+        background-color: #ffffff;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .container{
+        width: 90%;
+        display: flex;
+        margin: 40px auto 0;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar"></aside>
+      <main class="main-content">
+
+      <div class="header-bar">
+        <button class="toggle-btn" id="toggleBtn">☰</button>
+        <div class="schedule-logo">SCHEDULE</div>
+      </div>
+
+      <div class="container">
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+        <div>Sunday</div>
+      </div>
+
+      <script>
+      const toggleBtn = document.getElementById('toggleBtn');
+      const sidebar = document.getElementById('sidebar');
+
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+      });
+    </script>
+    </main>
+  </body>
+</html>
