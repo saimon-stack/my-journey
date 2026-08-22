@@ -48,7 +48,7 @@
         color: #000;
       }
 
-      .main-content{
+      .main-content {
         flex: 1;
         background-color: #ffffff;
         padding: 30px;
@@ -57,17 +57,45 @@
         position: relative;
       }
 
-      .container{
-        width: 90%;
+      .container {
+        width: 100%;
         display: flex;
         margin: 40px auto 0;
-        justify-content: space-between;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+      
+      .day-column {
+        flex: 1;
+        min-width: 130px; 
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .day-header {
+        font-weight: bold;
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+        background-color: #f1f1f1;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+
+      .day-content {
+        padding: 12px;
+        flex: 1;
+        min-height: 450px; 
       }
     </style>
   </head>
   <body>
     <aside class="sidebar" id="sidebar"></aside>
-      <main class="main-content">
+    <main class="main-content">
 
       <div class="header-bar">
         <button class="toggle-btn" id="toggleBtn">☰</button>
@@ -75,23 +103,50 @@
       </div>
 
       <div class="container">
-        <div>Monday</div>
-        <div>Tuesday</div>
-        <div>Wednesday</div>
-        <div>Thursday</div>
-        <div>Friday</div>
-        <div>Saturday</div>
-        <div>Sunday</div>
+        <div class="day-column">
+          <div class="day-header">Monday</div>
+          <div class="day-content"></div>
+        </div>
+
+        <div class="day-column">
+          <div class="day-header">Tuesday</div>
+          <div class="day-content"></div>
+        </div>
+
+        <div class="day-column">
+          <div class="day-header">Wednesday</div>
+          <div class="day-content"></div>
+        </div>
+
+        <div class="day-column">
+          <div class="day-header">Thursday</div>
+          <div class="day-content"></div>
+        </div>
+        
+        <div class="day-column">
+          <div class="day-header">Friday</div>
+          <div class="day-content"></div>
+        </div>
+
+        <div class="day-column">
+          <div class="day-header">Saturday</div>
+          <div class="day-content"></div>
+        </div>
+
+        <div class="day-column">
+          <div class="day-header">Sunday</div>
+          <div class="day-content"></div>
+        </div>
       </div>
 
       <script>
-      const toggleBtn = document.getElementById('toggleBtn');
-      const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const sidebar = document.getElementById('sidebar');
 
-      toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hidden');
-      });
-    </script>
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('hidden');
+        });
+      </script>
     </main>
   </body>
 </html>
